@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="icon">false</item>
+    <item type="id" name="favorite">false</item>
+    <item type="id" name="wifi">false</item>
+    <item type="id" name="menu_progressBar">false</item>
+    <item type="id" name="music">false</item>
+    <item type="id" name="video_num">false</item>
+    <item type="id" name="image">false</item>
+    <item type="id" name="image_num">false</item>
+    <item type="id" name="document">false</item>
+    <item type="id" name="document_num">false</item>
+    <item type="id" name="zip">false</item>
+    <item type="id" name="zip_num">false</item>
+    <item type="id" name="apk">false</item>
+    <item type="id" name="apk_num">false</item>
+  
+    
+    
+    
+</resources>

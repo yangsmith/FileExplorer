@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/file_browse_frame"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/moving_operation_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="48.0dip"
+        android:background="@drawable/abs__cab_background_top_holo_dark"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <ImageButton
+            android:id="@+id/button_moving_confirm"
+            android:layout_width="56.0dip"
+            android:layout_height="fill_parent"
+            android:background="@drawable/abs__item_background_holo_dark"
+            android:src="@drawable/ic_submit_actionbar" />
+
+        <View
+            android:layout_width="1.0px"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="12.0dip"
+            android:layout_marginTop="12.0dip"
+            android:background="#ff555555" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16.0dip"
+            android:layout_weight="1.0"
+            android:text="解压到..."
+            android:textColor="#ffffffff"
+            android:textSize="18.0sp" />
+
+        <Button
+            android:id="@+id/button_moving_cancel"
+            android:layout_width="48.0dip"
+            android:layout_height="fill_parent"
+            android:background="@drawable/abs__item_background_holo_dark"
+            android:text="@string/operation_cancel"
+            android:textColor="#ffffffff"
+            android:textSize="12.0sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffdddddd" >
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="30.0dip"
+            android:layout_alignParentRight="true"
+            android:fadingEdge="none"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:id="@+id/current_path"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/navigation_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/secondary_title_background"
+        android:gravity="center_vertical"
+        android:paddingLeft="10.0dip"
+        android:paddingRight="10.0dip"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical" >
+
+            <LinearLayout
+                android:id="@+id/current_path_pane"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxWidth="300.0dip"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:id="@+id/current_path_scroller"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5.0dip"
+                    android:layout_weight="1.0"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:id="@+id/current_path_view"
+                        style="?android:attr/textAppearanceMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="start"
+                        android:paddingLeft="10.0dip"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/path_pane_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/path_pane_up_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:layout_marginLeft="5.0dip" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="1.0">
+       <!-- android:background="@drawable/list_item_default_bg" -->
+
+        <ListView
+            android:id="@+id/file_path_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="#ffdddddd"
+            android:dividerHeight="1.0dip"
+            android:fastScrollEnabled="true"
+            android:footerDividersEnabled="true"
+            android:headerDividersEnabled="true"
+            android:listSelector="@null"
+            android:scrollbarThumbVertical="@drawable/scrollbar_handle" />
+
+        <GridView
+            android:id="@+id/file_path_grid"
+            android:layout_width="fill_parent"
+            android:layout_height="134dp"
+            android:fastScrollEnabled="true"
+            android:horizontalSpacing="0.0dip"
+            android:listSelector="@null"
+            android:numColumns="2"
+            android:scrollbarThumbVertical="@drawable/scrollbar_handle"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="0.0dip" />
+
+        <LinearLayout
+            android:id="@+id/empty_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_nofile_error" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/no_file"
+                android:textColor="#ffaaaaaa"
+                android:textSize="22.0sp" />
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/dropdown_navigation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dropdown"
+            android:overScrollMode="never"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:id="@+id/dropdown_navigation_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/sd_not_available_page"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_nosdcard_error" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/enable_sd_card"
+                android:textColor="#ffaaaaaa"
+                android:textSize="22.0sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/refresh_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ffededed"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateDrawable="@drawable/progress_holo" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/pick_operation_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/button_pick_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm" />
+
+        <Button
+            android:id="@+id/button_pick_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/operation_cancel" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/operation_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/button_operation_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/operation_delete" />
+
+        <TextView
+            android:id="@+id/button_operation_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/operation_copy" />
+
+        <TextView
+            android:id="@+id/button_operation_move"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/operation_move" />
+
+        <TextView
+            android:id="@+id/button_operation_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/operation_send" />
+
+        <TextView
+            android:id="@+id/button_operation_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/operation_cancel" />
+    </LinearLayout>
+
+</LinearLayout>
