@@ -25,15 +25,15 @@ public class MainActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-	//	requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
 		menuFragment     = new MenuFragment();
 		contentFragment  = new ContentFragment();
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.menu_fragment, menuFragment);
-		transaction.replace(R.id.content_fragment, contentFragment);
-		transaction.commit();
+	//	FragmentTransaction transaction = getFragmentManager().beginTransaction();
+	//	transaction.replace(R.id.menu_fragment, menuFragment);
+	//	transaction.replace(R.id.content_fragment, contentFragment);
+	//	transaction.commit();
 		
 		spl = (SlidingPaneLayout)findViewById(R.id.slidingpanellayout);
 		spl.setPanelSlideListener(new PanelSlideListener() {

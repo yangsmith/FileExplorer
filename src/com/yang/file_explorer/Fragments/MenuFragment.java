@@ -16,7 +16,7 @@ public class MenuFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		currentView = inflater.inflate(R.id.menu_fragment, container,false);
+		currentView = inflater.inflate(R.layout.menu_fragment, container,false);
 		return currentView;
 	}
 }
