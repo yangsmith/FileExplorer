@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="slidingmenu_width">200dp</dimen>
+     <dimen name="abs__action_bar_default_height">48dip</dimen>
+    <!-- Vertical padding around action bar icons. -->
+    <dimen name="abs__action_bar_icon_vertical_padding">8dip</dimen>
+    <!-- Text size for action bar titles -->
+    <dimen name="abs__action_bar_title_text_size">18dp</dimen>
+    <!-- Text size for action bar subtitles -->
+    <dimen name="abs__action_bar_subtitle_text_size">14dp</dimen>
+    <!-- Top margin for action bar subtitles -->
+    <dimen name="abs__action_bar_subtitle_top_margin">-3dp</dimen>
+    <!-- Bottom margin for action bar subtitles -->
+    <dimen name="abs__action_bar_subtitle_bottom_margin">5dip</dimen>
+
+    <integer name="abs__max_action_buttons">2</integer>
+
+    <!-- Minimum width for an action button in the menu area of an action bar -->
+    <dimen name="abs__action_button_min_width">56dip</dimen>
+
+
+    <!-- Text padding for dropdown items -->
+    <dimen name="abs__dropdownitem_text_padding_left">8dip</dimen>
+
+    <!-- Text padding for dropdown items -->
+    <dimen name="abs__dropdownitem_text_padding_right">8dip</dimen>
+
+    <!-- Width of the icon in a dropdown list -->
+    <dimen name="abs__dropdownitem_icon_width">32dip</dimen>
+
+
+    <!-- Minimum width of the search view text entry area. -->
+    <dimen name="abs__search_view_text_min_width">160dip</dimen>
+
+    <!-- Preferred width of the search view. -->
+    <dimen name="abs__search_view_preferred_width">320dip</dimen>
+    
+    <dimen name="abs__alert_dialog_title_height">64.0dip</dimen>
+    
+    <dimen name="list_padding">10.0dip</dimen>
+    <dimen name="shadow_width">6.0dip</dimen>
+    <dimen name="menu_y">-6.0dip</dimen>
+    <dimen name="menu_height">266.0dip</dimen>
+    <dimen name="dropdown_y_offset">-8.0dip</dimen>
+    <dimen name="dropdown_y_offset_needs_proxy">-4.0dip</dimen>
+
+</resources>

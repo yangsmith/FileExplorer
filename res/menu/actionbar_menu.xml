@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="@drawable/ic_sort_actionbar" android:id="@+id/sort" android:title="@string/sort" android:showAsAction="always">
+        <menu>
+            <item android:id="@+id/sort_by_name" android:title="@string/sort_by_name" />
+            <item android:id="@+id/sort_by_time" android:title="@string/sort_by_time" />
+            <item android:id="@+id/sort_by_size" android:title="@string/sort_by_size" />
+            <item android:id="@+id/sort_by_type" android:title="@string/sort_by_type" />
+        </menu>
+    </item>
+    <item android:icon="@drawable/ic_create_actionbar" android:id="@+id/create" android:title="@string/create" android:showAsAction="always" />
+    <item android:icon="@drawable/ic_search_actionbar" android:id="@+id/search" android:title="@string/search" android:showAsAction="always" />
+    <item android:icon="@drawable/ic_refresh_actionbar" android:id="@+id/refresh" android:title="@string/refresh" android:showAsAction="always" />
+    <item android:icon="@drawable/ic_more_actionbar" android:id="@+id/setting" android:title="@string/setting" android:showAsAction="never" />
+    <item android:icon="@drawable/ic_more_actionbar" android:id="@+id/about" android:title="@string/about" android:showAsAction="never" />
+    <item android:icon="@drawable/ic_more_actionbar" android:id="@+id/exit" android:title="@string/exit" android:showAsAction="never" />
+</menu>

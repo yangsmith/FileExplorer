@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="icon">false</item>
-    <item type="id" name="favorite">false</item>
-    <item type="id" name="wifi">false</item>
-    <item type="id" name="menu_progressBar">false</item>
-    <item type="id" name="music">false</item>
-    <item type="id" name="video_num">false</item>
-    <item type="id" name="image">false</item>
-    <item type="id" name="image_num">false</item>
-    <item type="id" name="document">false</item>
-    <item type="id" name="document_num">false</item>
-    <item type="id" name="zip">false</item>
-    <item type="id" name="zip_num">false</item>
-    <item type="id" name="apk">false</item>
-    <item type="id" name="apk_num">false</item>
-  
-    
-    
-    
+
+    <item name="abs__home" type="id"/>
+    <item name="abs__up" type="id"/>
+    <item name="abs__action_menu_divider" type="id"/>
+    <item name="abs__action_menu_presenter" type="id"/>
+    <item name="abs__progress_circular" type="id"/>
+    <item name="abs__progress_horizontal" type="id"/>
+    <item name="icon" type="id">false</item>
+    <item name="favorite" type="id">false</item>
+    <item name="wifi" type="id">false</item>
+    <item name="menu_progressBar" type="id">false</item>
+    <item name="music" type="id">false</item>
+    <item name="video_num" type="id">false</item>
+    <item name="image" type="id">false</item>
+    <item name="image_num" type="id">false</item>
+    <item name="document" type="id">false</item>
+    <item name="document_num" type="id">false</item>
+    <item name="zip" type="id">false</item>
+    <item name="zip_num" type="id">false</item>
+    <item name="apk" type="id">false</item>
+    <item name="apk_num" type="id">false</item>
+    <item name="selected_view" type="id"/>
+    <item name="title" type="id"/>
+    <item name="file_num" type="id"/>
+
 </resources>

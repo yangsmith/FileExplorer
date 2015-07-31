@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="abs__background_holo_dark">#ff000000</color>
+    <color name="abs__background_holo_light">#fff3f3f3</color>
+    <color name="abs__bright_foreground_holo_dark">@color/abs__background_holo_light</color>
+    <color name="abs__bright_foreground_holo_light">@color/abs__background_holo_dark</color>
+    <color name="abs__bright_foreground_disabled_holo_dark">#ff4c4c4c</color>
+    <color name="abs__bright_foreground_disabled_holo_light">#ffb2b2b2</color>
+    <color name="abs__holo_blue_light">#ff33b5e5</color>
+    <color name="red">#ffff0000</color>
+    <color name="green">#ff009900</color>
+    <color name="blue">#ff000099</color>
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="yellow">#fffff000</color>
+    <color name="gray">#ffa6a6a0</color>
+    <color name="orange">#ffff9900</color>
+    <color name="deepcolor">#fffaaa5f</color>
+    <color name="shadowcolor">#ff333333</color>
+    <color name="naming">#ffababab</color>
+    <color name="background">#ff272727</color>
+    <color name="orange_yellow">#ff9b9ba0</color>
+    <color name="remote_connect_text">#ffe78018</color>
+    <color name="remote_disconnect_text">#ff901821</color>
+
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="drawable" name="translucent_background">#00ffffff</item>
+    <item type="drawable" name="list_item_default_bg">#ffededed</item>
+    <item type="drawable" name="semi_black">#80000000</item>
+</resources>
