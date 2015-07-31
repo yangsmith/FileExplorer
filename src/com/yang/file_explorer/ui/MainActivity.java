@@ -3,6 +3,7 @@ package com.yang.file_explorer.ui;
 import com.yang.file_explorer.R;
 
 
+import com.yang.file_explorer.entity.MenuItemType;
 import com.yang.file_explorer.slidingmenu.SlidingMenu;
 import com.yang.file_explorer.ui.base.BaseSlidingFragmentActivity;
 
@@ -11,6 +12,9 @@ import com.yang.file_explorer.ui.base.BaseSlidingFragmentActivity;
 
 
 
+
+
+import com.yang.file_explorer.view.SlidingMenuFragment;
 
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -22,8 +26,10 @@ import android.widget.TextView;
 public class MainActivity extends BaseSlidingFragmentActivity{
 
 	private SlidingMenu sm;
+	private MenuItemType menuItemType;
 	private TextView title;
 	private TextView filenum;
+	private boolean bmenuVisible;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +38,8 @@ public class MainActivity extends BaseSlidingFragmentActivity{
 		getWindow().setFormat(PixelFormat.RGBA_8888);
 		initActionBar();
 	    initSlidingMenu();
-	    setContentView(R.layout.activity_main);
+	    setContentView(R.layout.content_frame);
+	    SetShowSelFragments(MenuItemType.MENU_DEVICE);
 	}
 	
 	// 初始化SlidingMenu
@@ -58,4 +65,21 @@ public class MainActivity extends BaseSlidingFragmentActivity{
 		getSupportActionBar().setDisplayShowCustomEnabled(true);
 		
 	}
+	
+	//显示选择的碎片
+	public final void SetShowSelFragments(MenuItemType type){
+		menuItemType = type;
+		bmenuVisible = ((SlidingMenuFragment)getSupportFragmentManager().findFragmentById(R.id.slidingmenumain)).
+		if(type == MenuItemType.MENU_DEVICE){
+			return;
+		}
+		
+		if (type == MenuItemType.MENU_WIFI) {
+			return;
+		}
+		
+		
+		
+	}
+	
 }

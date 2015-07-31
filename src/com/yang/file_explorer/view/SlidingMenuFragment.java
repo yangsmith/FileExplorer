@@ -3,8 +3,8 @@ package com.yang.file_explorer.view;
 import com.yang.file_explorer.R;
 import com.yang.file_explorer.entity.MenuItemType;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +58,7 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
     	zip      = (RelativeLayout)menu.findViewById(R.id.zip);
     	apk      = (RelativeLayout)menu.findViewById(R.id.apk);
     	
-    	//点击监听
+    	//监听点击事件
     	device.setOnClickListener(this);
     	favorite.setOnClickListener(this);
     	wifi.setOnClickListener(this);

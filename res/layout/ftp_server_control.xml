@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.youba.FileExplorer"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffededed"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/instruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/input_ip_label"
+        android:textColor="#ff555555"
+        android:textSize="14.0sp" />
+
+</LinearLayout>

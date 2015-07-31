@@ -6,19 +6,19 @@
 
     <fragment
         android:id="@+id/file_fragment"
-        android:name="net.micode.fileexplorer.FileViewActivity"
+        android:name="com.yang.file_explorer.view.FileViewFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
     <fragment
         android:id="@+id/category_fragment"
-        android:name="net.micode.fileexplorer.FileCategoryActivity"
+        android:name="com.yang.file_explorer.view.FileCategoryFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
     <fragment
         android:id="@+id/ftp_fragment"
-        android:name="net.micode.fileexplorer.ServerControlActivity"
+        android:name="com.yang.file_explorer.view.FtpServerControlFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
