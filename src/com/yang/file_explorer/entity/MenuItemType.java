@@ -5,6 +5,7 @@ public enum MenuItemType {
 	MENU_FAVORITE,
 	MENU_WIFI,
 	MENU_MUSIC,
+	MENU_IMAGE,
     MENU_VIDEO,
     MENU_DOCUMENT,
     MENU_ZIP,

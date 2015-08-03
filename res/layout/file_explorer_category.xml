@@ -363,7 +363,7 @@
                         android:layout_marginLeft="10.0dip" />
                 </LinearLayout>
 
-                <net.micode.fileexplorer.CategoryBar
+                <com.yang.file_explorer.view.CategoryBar
                     android:id="@+id/category_bar"
                     android:layout_width="fill_parent"
                     android:layout_height="35.0px"

@@ -16,8 +16,10 @@ import com.yang.file_explorer.ui.base.BaseSlidingFragmentActivity;
 
 import com.yang.file_explorer.view.SlidingMenuFragment;
 
+import android.R.string;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,11 +27,13 @@ import android.widget.TextView;
 
 public class MainActivity extends BaseSlidingFragmentActivity{
 
+	private String LOG_TAG = "MainActivity";
 	private SlidingMenu sm;
-	private MenuItemType menuItemType;
+	private MenuItemType currentmenuItemType;
 	private TextView title;
 	private TextView filenum;
 	private boolean bmenuVisible;
+	private FragmentTransaction mfragmentTransaction;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class MainActivity extends BaseSlidingFragmentActivity{
 		initActionBar();
 	    initSlidingMenu();
 	    setContentView(R.layout.content_frame);
-	    SetShowSelFragments(MenuItemType.MENU_DEVICE);
+	    setShowSelFragments(MenuItemType.MENU_DEVICE);
 	}
 	
 	// 初始化SlidingMenu
@@ -49,7 +53,6 @@ public class MainActivity extends BaseSlidingFragmentActivity{
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 		sm.setBehindWidthRes(R.dimen.slidingmenu_width);
 		sm.setBehindScrollScale(0);
-
 	}
 	
 	//初始化操作栏
@@ -67,19 +70,69 @@ public class MainActivity extends BaseSlidingFragmentActivity{
 	}
 	
 	//显示选择的碎片
-	public final void SetShowSelFragments(MenuItemType type){
-		menuItemType = type;
-		bmenuVisible = ((SlidingMenuFragment)getSupportFragmentManager().findFragmentById(R.id.slidingmenumain)).
-		if(type == MenuItemType.MENU_DEVICE){
+	public final void setShowSelFragments(MenuItemType menutype){
+		currentmenuItemType= menutype;
+		bmenuVisible = ((SlidingMenuFragment)getSupportFragmentManager().findFragmentById(R.id.menu_fragment)).SelMenu(menutype);
+		if(menutype == MenuItemType.MENU_DEVICE){
+			setTitle(R.string.my_device);
+			mfragmentTransaction = getSupportFragmentManager().beginTransaction();
+			mfragmentTransaction.show(getSupportFragmentManager().findFragmentById(R.id.file_fragment));
+			mfragmentTransaction.hide(getSupportFragmentManager().findFragmentById(R.id.category_fragment));
+			mfragmentTransaction.hide(getSupportFragmentManager().findFragmentById(R.id.ftp_fragment));
+			mfragmentTransaction.commitAllowingStateLoss();
+			
 			return;
 		}
 		
-		if (type == MenuItemType.MENU_WIFI) {
+		if (menutype == MenuItemType.MENU_WIFI) {
+			setTheme(R.string.wifi);
+			mfragmentTransaction = getSupportFragmentManager().beginTransaction();
+			mfragmentTransaction.hide(getSupportFragmentManager().findFragmentById(R.id.file_fragment));
+			mfragmentTransaction.hide(getSupportFragmentManager().findFragmentById(R.id.category_fragment));
+			mfragmentTransaction.show(getSupportFragmentManager().findFragmentById(R.id.ftp_fragment));
+			mfragmentTransaction.commitAllowingStateLoss();
 			return;
 		}
 		
 		
+		mfragmentTransaction = getSupportFragmentManager().beginTransaction();
+		mfragmentTransaction.hide(getSupportFragmentManager().findFragmentById(R.id.file_fragment));
+		mfragmentTransaction.show(getSupportFragmentManager().findFragmentById(R.id.category_fragment));
+		mfragmentTransaction.hide(getSupportFragmentManager().findFragmentById(R.id.ftp_fragment));
+		mfragmentTransaction.commitAllowingStateLoss();
+		
+		switch(menutype){
+		 case MENU_FAVORITE:
+			 setTitle(R.string.star);
+			 break;
+		 case MENU_IMAGE:
+			 setTitle(R.string.image);
+			 break;
+		 case MENU_VIDEO:
+			 setTitle(R.string.video);
+			 break;
+		 case MENU_DOCUMENT:
+			 setTitle(R.string.document);
+			 break;
+		 case MENU_ZIP:
+			 setTitle(R.string.zip);
+			 break;
+		 case MENU_APK:
+			 setTitle(R.string.apk);
+			 break;
+		 case MENU_MUSIC:
+			 setTitle(R.string.music);
+			 break;
+		default:
+			break;
+		}
 		
 	}
+	
+	//设置标题
+	public final void setTitle(int resid){
+		title.setText(resid);
+	}
+	
 	
 }
