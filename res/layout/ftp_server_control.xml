@@ -1,17 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/com.youba.FileExplorer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffededed"
     android:orientation="vertical" >
+    
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="54.0dip"
+        android:layout_marginLeft="8.0dip"
+        android:layout_marginRight="8.0dip"
+        android:background="#ffffffff"
+        android:gravity="center_vertical"
+        android:paddingLeft="8.0dip"
+        android:paddingRight="8.0dip" 
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/instruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/input_ip_label"
-        android:textColor="#ff555555"
-        android:textSize="14.0sp" />
+        <TextView
+            android:id="@+id/instruction_pre"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/can_manager_files"
+            android:textColor="#ff555555"
+            android:textSize="16.0sp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@id/instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/input_ip_label"
+                android:textColor="#ff555555"
+                android:textSize="14.0sp" />
+
+            <TextView
+                android:id="@+id/ip_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffcc0000"
+                android:textSize="18.0sp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

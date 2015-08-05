@@ -24,5 +24,10 @@
     <item name="selected_view" type="id"/>
     <item name="title" type="id"/>
     <item name="file_num" type="id"/>
+    <item name="file_browse_frame" type="id"/>
+      <item name="instruction" type="id"/>
+    
+    
+    
 
 </resources>

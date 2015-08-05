@@ -1,17 +1,15 @@
-package com.yang.file_explorer.ui.base;
+package com.yang.file_explorer.slidingmenu.app;
 
+import com.yang.file_explorer.slidingmenu.SlidingMenu;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.yang.file_explorer.slidingmenu.SlidingActivityBase;
-import com.yang.file_explorer.slidingmenu.SlidingActivityHelper;
-import com.yang.file_explorer.slidingmenu.SlidingMenu;
 
-
-public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implements SlidingActivityBase {
+public class SlidingActivity extends Activity implements SlidingActivityBase {
 
 	private SlidingActivityHelper mHelper;
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete_actionbar"
+        android:showAsAction="ifRoom"
+        android:title="@string/delete"/>
+    <item
+        android:id="@+id/copy"
+        android:icon="@drawable/ic_copy_actionbar"
+        android:showAsAction="ifRoom"
+        android:title="@string/copy"/>
+    <item
+        android:id="@+id/cut"
+        android:icon="@drawable/ic_cut_actionbar"
+        android:showAsAction="ifRoom"
+        android:title="@string/cut"/>
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_share_actionbar"
+        android:showAsAction="ifRoom"
+        android:title="@string/share"/>
+    <item
+        android:id="@+id/favorite"
+        android:showAsAction="ifRoom"
+        android:title="@string/favorite"/>
+    <item
+        android:id="@+id/rename"
+        android:showAsAction="ifRoom"
+        android:title="@string/rename"/>
+    <item
+        android:id="@+id/detail"
+        android:showAsAction="ifRoom"
+        android:title="@string/detail"/>
+    <item
+        android:id="@+id/compress"
+        android:showAsAction="ifRoom"
+        android:title="@string/compress"/>
+
+</menu>

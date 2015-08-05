@@ -44,6 +44,11 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
 	//Ñ¡Ôñ²Ëµ¥
 	private MenuItemType currentmenuItemType = MenuItemType.MENU_DEVICE;
 	
+	
+	public void SlidingMenuFragment(){
+		
+	}
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
     		Bundle savedInstanceState) {

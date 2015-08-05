@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete_actionbar"
+        android:showAsAction="always"
+        android:title="@string/operation_delete"/>
+    <item
+        android:id="@+id/action_copy"
+        android:icon="@drawable/ic_copy_actionbar"
+        android:showAsAction="always"
+        android:title="@string/operation_copy"/>
+    <item
+        android:id="@+id/action_move"
+        android:icon="@drawable/ic_cut_actionbar"
+        android:showAsAction="always"
+        android:title="@string/operation_move"/>
+    <item
+        android:id="@+id/action_send"
+        android:icon="@drawable/ic_share_actionbar"
+        android:showAsAction="always"
+        android:title="@string/operation_send"/>
+    <item
+        android:id="@+id/action_copy_path"
+        android:showAsAction="never"
+        android:title="@string/operation_copy_path"
+        android:visible="false"/>
+    <item
+        android:id="@+id/action_favorite"
+        android:showAsAction="never"
+        android:title="@string/operation_favorite"/>
+    <item
+        android:id="@+id/action_rename"
+        android:showAsAction="never"
+        android:title="@string/operation_rename"/>
+    <item
+        android:id="@+id/action_info"
+        android:showAsAction="never"
+        android:title="@string/operation_info"/>
+    <item
+        android:id="@+id/action_compress"
+        android:showAsAction="never"
+        android:title="@string/operation_compress"/>
+
+</menu>

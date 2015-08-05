@@ -1,17 +1,16 @@
-package com.yang.file_explorer.ui.base;
+package  com.yang.file_explorer.slidingmenu.app;
+
+
+
+import com.yang.file_explorer.slidingmenu.SlidingMenu;
 
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.yang.file_explorer.slidingmenu.SlidingActivityBase;
-import com.yang.file_explorer.slidingmenu.SlidingActivityHelper;
-import com.yang.file_explorer.slidingmenu.SlidingMenu;
-
-
-public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implements SlidingActivityBase {
+public class SlidingPreferenceActivity extends PreferenceActivity implements SlidingActivityBase {
 
 	private SlidingActivityHelper mHelper;
 
@@ -20,8 +19,8 @@ public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implem
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		mHelper = new SlidingActivityHelper(this);
+		super.onCreate(savedInstanceState);
 		mHelper.onCreate(savedInstanceState);
 	}
 
@@ -127,7 +126,7 @@ public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implem
 	public void showMenu() {
 		mHelper.showMenu();
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase#showSecondaryMenu()
 	 */
@@ -151,5 +150,4 @@ public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implem
 		if (b) return b;
 		return super.onKeyUp(keyCode, event);
 	}
-
 }

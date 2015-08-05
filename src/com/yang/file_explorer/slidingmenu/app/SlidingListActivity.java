@@ -1,17 +1,17 @@
-package com.yang.file_explorer.ui.base;
+package  com.yang.file_explorer.slidingmenu.app;
 
+import com.yang.file_explorer.slidingmenu.SlidingMenu;
+
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.yang.file_explorer.slidingmenu.SlidingActivityBase;
-import com.yang.file_explorer.slidingmenu.SlidingActivityHelper;
-import com.yang.file_explorer.slidingmenu.SlidingMenu;
+import android.widget.ListView;
 
 
-public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implements SlidingActivityBase {
+
+public class SlidingListActivity extends ListActivity implements SlidingActivityBase {
 
 	private SlidingActivityHelper mHelper;
 
@@ -23,6 +23,9 @@ public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implem
 		super.onCreate(savedInstanceState);
 		mHelper = new SlidingActivityHelper(this);
 		mHelper.onCreate(savedInstanceState);
+		ListView listView = new ListView(this);
+		listView.setId(android.R.id.list);
+		setContentView(listView);
 	}
 
 	/* (non-Javadoc)
@@ -127,8 +130,9 @@ public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implem
 	public void showMenu() {
 		mHelper.showMenu();
 	}
-
-	/* (non-Javadoc)
+	
+	/*
+	 * (non-Javadoc)
 	 * @see com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase#showSecondaryMenu()
 	 */
 	public void showSecondaryMenu() {

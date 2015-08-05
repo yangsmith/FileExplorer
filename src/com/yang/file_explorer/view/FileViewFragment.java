@@ -6,11 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.yang.file_explorer.R;
 import com.yang.file_explorer.ui.MainActivity;
+import com.yang.file_explorer.utils.MenuUtils;
 
 public class FileViewFragment extends SherlockFragment{
 
+	private MenuUtils menuUtils;
 	private MainActivity mActivity;
 	private View mfileExplorerListView;
 	@Override
@@ -18,7 +22,19 @@ public class FileViewFragment extends SherlockFragment{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		 mActivity = (MainActivity)getActivity();
+		 setHasOptionsMenu(true);
 		 mfileExplorerListView = inflater.inflate(R.layout.file_explorer_list, container, false);
 		 return mfileExplorerListView;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		if (!mActivity.getSupportActionBar().isShowing()) {
+			return;
+		}
+		
+		menuUtils.addMenu(menu);
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 }

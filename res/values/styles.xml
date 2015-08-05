@@ -698,7 +698,7 @@
     </style>
 
     <style name="ExampleTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar.ForceOverflow">
-        <item name="homeAsUpIndicator">@drawable/ic_menu_actionbar</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_menu_actionbar</item>
     </style>
 
     <style name="wait_dialog" parent="@android:style/Theme.Dialog">

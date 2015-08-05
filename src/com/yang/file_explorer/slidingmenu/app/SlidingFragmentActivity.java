@@ -1,22 +1,21 @@
-package com.yang.file_explorer.ui.base;
+package  com.yang.file_explorer.slidingmenu.app;
+
+import com.yang.file_explorer.slidingmenu.SlidingMenu;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.yang.file_explorer.slidingmenu.SlidingActivityBase;
-import com.yang.file_explorer.slidingmenu.SlidingActivityHelper;
-import com.yang.file_explorer.slidingmenu.SlidingMenu;
 
 
-public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implements SlidingActivityBase {
+public class SlidingFragmentActivity extends FragmentActivity implements SlidingActivityBase {
 
 	private SlidingActivityHelper mHelper;
 
 	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class BaseSlidingFragmentActivity extends SherlockFragmentActivity implem
 	}
 
 	/* (non-Javadoc)
-	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
