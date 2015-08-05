@@ -15,6 +15,16 @@ import com.yang.file_explorer.R;
 
 public class MenuUtils implements OnMenuItemClickListener{
 
+	 private static MenuUtils mmenuMenuUtils = null;
+	
+	//创建实例
+	 public static MenuUtils getInstance(){
+		if (mmenuMenuUtils == null) {
+			mmenuMenuUtils = new MenuUtils();
+		}
+		
+		return mmenuMenuUtils;
+	}
 	
 	public boolean addMenu(Menu menu){
 		
@@ -27,19 +37,20 @@ public class MenuUtils implements OnMenuItemClickListener{
 		addMenu(subMenu, 13, 2, R.string.menu_item_sort_size);
 		addMenu(subMenu, 14, 3, R.string.menu_item_sort_type);
 		
+		
 		//新建菜单
-		addMenu(subMenu, 2, 1, R.string.new_folder_name,R.drawable.ic_create_actionbar);
+		addMenu(menu, 2, 1, R.string.new_folder_name,R.drawable.ic_create_actionbar);
 		
 		//搜索菜单
-		addMenu(subMenu, 3, 2, R.string.search,R.drawable.ic_search_actionbar);
+		addMenu(menu, 3, 2, R.string.search,R.drawable.ic_search_actionbar);
 		//刷新菜单
-		addMenu(subMenu, 4, 3, R.string.refresh,R.drawable.ic_refresh_actionbar);
+		addMenu(menu, 4, 3, R.string.refresh,R.drawable.ic_refresh_actionbar);
 		//设置菜单
-		addMenu(subMenu, 5, 4, R.string.setting);
+		addMenu(menu, 5, 4, R.string.setting);
 		//关于菜单
-		addMenu(subMenu, 6, 5, R.string.about);
+		addMenu(menu, 6, 5, R.string.about);
 		//退出
-		addMenu(subMenu, 7, 6, R.string.exit);
+		addMenu(menu, 7, 6, R.string.exit);
 		return true;
 	}
 	

@@ -13,8 +13,7 @@ import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.MenuUtils;
 
 public class FileViewFragment extends SherlockFragment{
-
-	private MenuUtils menuUtils;
+	
 	private MainActivity mActivity;
 	private View mfileExplorerListView;
 	@Override
@@ -34,7 +33,7 @@ public class FileViewFragment extends SherlockFragment{
 			return;
 		}
 		
-		menuUtils.addMenu(menu);
+		MenuUtils.getInstance().addMenu(menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 }
