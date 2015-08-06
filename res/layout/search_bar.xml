@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="48.0dip"
+    android:background="@drawable/topbar_tile_bg"
+    android:gravity="bottom"
+    android:orientation="horizontal"
+    android:paddingRight="8.0dip" >
+
+    <LinearLayout
+        android:id="@+id/back"
+        android:layout_width="48.0dip"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="16.0dip"
+        android:background="@drawable/menu_item_selecter"
+        android:clickable="true"
+        android:gravity="center_vertical" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/abs__ic_ab_back_holo_dark" />
+
+        <ImageView
+            android:layout_width="32.0dip"
+            android:layout_height="32.0dip"
+            android:layout_marginLeft="-4.0dip"
+            android:src="@drawable/ic_logo_actionbar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6.0dip"
+        android:layout_weight="1.0"
+        android:background="@drawable/textfield_search_selected" >
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6.0dip"
+            android:layout_weight="1.0" >
+
+            <TextView
+                android:id="@+id/hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_search_actionbar"
+                android:gravity="center"
+                android:text="@string/search_hint"
+                android:textColor="#ffaaaaaa"
+                android:textSize="18.0sp" />
+
+            <com.yang.file_explorer.widget.SearchEditText
+                android:id="@+id/input"
+                android:layout_width="fill_parent"
+                android:layout_height="32.0dip"
+                android:background="@null"
+                android:singleLine="true"
+                android:textColor="#ffffffff"
+                android:textCursorDrawable="@null"
+                android:textSize="18.0sp" />
+        </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/clean"
+            android:layout_width="48.0dip"
+            android:layout_height="32.0dip"
+            android:layout_marginLeft="9.0dip"
+            android:background="@drawable/menu_item_selecter"
+            android:src="@drawable/ic_cancel_actionbar"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/voice_layout"
+        android:layout_width="64.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6.0dip"
+        android:background="@drawable/textfield_search_right_selected"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/voice"
+            android:layout_width="fill_parent"
+            android:layout_height="36.0dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/menu_item_selecter"
+            android:gravity="bottom"
+            android:src="@drawable/ic_voice_actionbar" />
+    </LinearLayout>
+
+</LinearLayout>

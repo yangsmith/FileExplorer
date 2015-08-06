@@ -2,7 +2,10 @@ package com.yang.file_explorer.utils;
 
 
 
-import android.R.string;
+
+
+import android.content.Intent;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -11,13 +14,17 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.view.SubMenu;
 import com.yang.file_explorer.R;
+import com.yang.file_explorer.ui.MainActivity;
+import com.yang.file_explorer.ui.SearchActivity;
 
 
 public class MenuUtils implements OnMenuItemClickListener{
 
-	 private static MenuUtils mmenuMenuUtils = null;
+	 private static MenuUtils mmenuMenuUtils = null;;
+	
 	
 	//创建实例
+	 private MenuUtils() {}
 	 public static MenuUtils getInstance(){
 		if (mmenuMenuUtils == null) {
 			mmenuMenuUtils = new MenuUtils();
@@ -36,7 +43,8 @@ public class MenuUtils implements OnMenuItemClickListener{
 		addMenu(subMenu, 12, 1, R.string.menu_item_sort_name);
 		addMenu(subMenu, 13, 2, R.string.menu_item_sort_size);
 		addMenu(subMenu, 14, 3, R.string.menu_item_sort_type);
-		
+		subMenu.setGroupCheckable(0, true, true);
+		subMenu.getItem(0).setChecked(true);
 		
 		//新建菜单
 		addMenu(menu, 2, 1, R.string.new_folder_name,R.drawable.ic_create_actionbar);
@@ -79,6 +87,42 @@ public class MenuUtils implements OnMenuItemClickListener{
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
 		// TODO Auto-generated method stub
-		return false;
+        switch (item.getItemId()) {
+		case 11:  //时间排序
+			ToastUtils.getInstance().showMask("时间排序", Toast.LENGTH_LONG);
+			break;
+		case 12:  //名字排序
+			ToastUtils.getInstance().showMask("名字排序", Toast.LENGTH_LONG);
+			break;
+		case 13:   // 大小排序
+			break;
+		case 14:   //类型排序
+			break;
+		case 2:    //新建
+			ToastUtils.getInstance().showMask("新建", Toast.LENGTH_LONG);
+			break;
+		case 3:    //搜索
+		    Intent intent = new Intent(MainActivity.getActivity(),SearchActivity.class);
+		    MainActivity.getActivity().startActivity(intent);
+			break;
+		case 4:    //刷新
+			ToastUtils.getInstance().showMask("刷新", Toast.LENGTH_LONG);
+			break;
+		case 5:  //设置
+			
+			break;
+			
+		case 6:  //关于
+			ToastUtils.getInstance().showMask("关于", Toast.LENGTH_LONG);
+			break;
+			
+		case 7:  //退出
+			break;
+        
+
+		default:
+			break;
+		}
+		return true;
 	}
 }

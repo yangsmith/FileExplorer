@@ -19,6 +19,8 @@ import com.yang.file_explorer.view.SlidingMenuFragment;
 
 import android.R.bool;
 import android.R.string;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,7 @@ public class MainActivity extends BaseSlidingFragmentActivity{
 	private boolean bmenuVisible;
 	private FragmentTransaction mfragmentTransaction;
 	private Fragment mcontentFragment;
+	private static Activity mActivity = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class MainActivity extends BaseSlidingFragmentActivity{
 		getWindow().setFormat(PixelFormat.RGBA_8888);
 		initActionBar();
 		initSlidingMenu();
+		
+		mActivity = this;
 		setShowSelFragments(MenuItemType.MENU_DEVICE);
 	}
 	
@@ -144,6 +149,9 @@ public class MainActivity extends BaseSlidingFragmentActivity{
 		title.setText(resid);
 	}
 	
+	public static Activity getActivity(){
+		return mActivity;
+	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/search_bar" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="30.0dip"
+                android:background="#ffdddddd"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16.0dip"
+                    android:layout_marginRight="8.0dip"
+                    android:text="@string/filter_label"
+                    android:textColor="#ff333333"
+                    android:textSize="14.0sp" />
+
+                <LinearLayout
+                    android:id="@+id/filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/menu_item_selecter"
+                    android:clickable="true" >
+
+                    <TextView
+                        android:layout_width="90.0dip"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/textfield_filetype_search"
+                        android:text="所有文件"
+                        android:textColor="#ff555555"
+                        android:textSize="16.0sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/search_list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ffededed"
+                android:divider="#ffdddddd"
+                android:dividerHeight="1.0dip"
+                android:fastScrollEnabled="true"
+                android:footerDividersEnabled="true"
+                android:headerDividersEnabled="true"
+                android:listSelector="@null" />
+
+            <TextView
+                android:id="@+id/empty_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/search_info"
+                android:textColor="#ff999999"
+                android:textSize="22.0sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="5.0dip"
+            android:background="@drawable/actionbar_shadow" />
+
+        <LinearLayout
+            android:id="@+id/progress_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="30.0dip"
+            android:background="#ffededed"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ProgressBar
+                android:id="@+id/search_progress"
+                style="@android:style/Widget.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateDrawable="@drawable/progress_holo" />
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>
