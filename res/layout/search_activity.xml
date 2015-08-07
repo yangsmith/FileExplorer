@@ -73,7 +73,8 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="5.0dip"
-            android:background="@drawable/actionbar_shadow" />
+            android:background="@drawable/actionbar_shadow" 
+             />
 
         <LinearLayout
             android:id="@+id/progress_view"
@@ -83,7 +84,7 @@
             android:background="#ffededed"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone" >
+             android:visibility="gone">
 
             <ProgressBar
                 android:id="@+id/search_progress"

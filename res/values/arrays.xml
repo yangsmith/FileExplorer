@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="color_names">
+        <item>Red</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>White</item>
+        <item>Black</item>
+    </string-array>
+    <string-array name="filter_category">
+        <item>所有文件</item>
+        <item>音频</item>
+        <item>视频</item>
+        <item>图片</item>
+        <item>文档</item>
+        <item>压缩包</item>
+        <item>安装包</item>
+    </string-array>
+</resources>
