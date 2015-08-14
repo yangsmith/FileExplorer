@@ -215,6 +215,13 @@ public class FileInteractionHub implements IOperationProgressListener {
 		return path.equals(GlobalConsts.ROOT_PATH) ? path + name : path
 				+ File.separator + name;
 	}
+	
+	/*
+	 * 选中文件数量
+	 */
+	public ArrayList<FileInfo> getSelectedFileList() {
+		return mCheckedFileNameList;
+	}
 
 	public void setRootPath(String path) {
 		mRootPath = path;

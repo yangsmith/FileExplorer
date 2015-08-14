@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashSet;
 
+import com.actionbarsherlock.view.ActionMode;
+import com.yang.file_explorer.R;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.entity.Settings;
 
@@ -16,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class FileUtil {
@@ -219,4 +222,15 @@ public class FileUtil {
 		return lFileInfo;
 	}
 
+	/*
+	 * ActionMode 显示选中的个数
+	 */
+	public static void updateActionModeTitle(ActionMode mode,Button btntitle, Context context, int selectedNum) {
+        if (mode != null) {
+        	btntitle.setText(context.getString(R.string.multi_select_title,selectedNum));
+            if(selectedNum == 0){
+                mode.finish();
+            }
+        }
+    }
 }

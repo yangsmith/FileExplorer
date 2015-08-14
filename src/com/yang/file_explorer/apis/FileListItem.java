@@ -3,6 +3,7 @@ package com.yang.file_explorer.apis;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -69,7 +70,6 @@ public class FileListItem {
 
 	}
 
-	
 	public static class FileItemOnClickListener implements OnClickListener {
 
 		private Context mContext;
@@ -125,6 +125,7 @@ public class FileListItem {
 	public static class ModeCallback implements ActionMode.Callback {
 
 		private Menu mMenu;
+		private Button btnTitle;
 		private Context mContext;
 		private FileInteractionHub mfInteractionHub;
 
@@ -137,10 +138,12 @@ public class FileListItem {
 		@Override
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			// TODO Auto-generated method stub
-			MenuInflater menuInflater = ((MainActivity)mContext).getSupportMenuInflater();
+			MenuInflater menuInflater = ((MainActivity) mContext)
+					.getSupportMenuInflater();
 			mMenu = menu;
 			menuInflater.inflate(R.menu.action_mode_menu, mMenu);
 			View titleView = View.inflate(mContext, R.layout.action_mode, null);
+			btnTitle = (Button)titleView.findViewById(R.id.selection_menu);
 			mode.setCustomView(titleView);
 			return true;
 		}
@@ -154,15 +157,17 @@ public class FileListItem {
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			// TODO Auto-generated method stub
-			
+
+			FileUtil.updateActionModeTitle(mode, btnTitle,mContext, mfInteractionHub
+					.getSelectedFileList().size());
 			return false;
 		}
 
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
 			// TODO Auto-generated method stub
-			 mfInteractionHub.clearSelection();
-	         ((MainActivity) mContext).setActionMode(null);
+			mfInteractionHub.clearSelection();
+			((MainActivity) mContext).setActionMode(null);
 		}
 
 	}
