@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navigation_bar"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/selection_menu_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:background="@drawable/selection_menu_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/selection_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6.0dip"
+            android:layout_marginRight="8.0dip"
+            android:layout_marginTop="6.0dip"
+            android:background="@drawable/ic_dropdown_picker"
+            android:clickable="false"
+            android:gravity="center|left"
+            android:singleLine="true"
+            android:text="选中了3项"
+            android:textColor="#ffffffff"
+            android:textSize="18.0sp" />
+    </LinearLayout>
+
+</LinearLayout>

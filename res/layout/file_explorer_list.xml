@@ -68,63 +68,6 @@
         </HorizontalScrollView>
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/navigation_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/secondary_title_background"
-        android:gravity="center_vertical"
-        android:paddingLeft="10.0dip"
-        android:paddingRight="10.0dip"
-        android:visibility="gone" >
-
-        <LinearLayout
-            android:layout_width="0.0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:gravity="center_vertical" >
-
-            <LinearLayout
-                android:id="@+id/current_path_pane"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:maxWidth="300.0dip"
-                android:orientation="horizontal" >
-
-                <LinearLayout
-                    android:id="@+id/current_path_scroller"
-                    android:layout_width="0.0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5.0dip"
-                    android:layout_weight="1.0"
-                    android:gravity="center_vertical" >
-
-                    <TextView
-                        android:id="@+id/current_path_view"
-                        style="?android:attr/textAppearanceMedium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="start"
-                        android:paddingLeft="10.0dip"
-                        android:singleLine="true" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/path_pane_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/path_pane_up_level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
-            android:layout_marginLeft="5.0dip" />
-    </LinearLayout>
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -144,7 +87,10 @@
             android:listSelector="@null"
             android:scrollbarThumbVertical="@drawable/scrollbar_handle" />
 
-        <GridView
+
+<!-- 
+
+      <GridView
             android:id="@+id/file_path_grid"
             android:layout_width="fill_parent"
             android:layout_height="134dp"
@@ -154,7 +100,10 @@
             android:numColumns="2"
             android:scrollbarThumbVertical="@drawable/scrollbar_handle"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="0.0dip" />
+            android:verticalSpacing="0.0dip" 
+            android:visibility="gone"/>
+ -->
+     
 
         <LinearLayout
             android:id="@+id/empty_view"
@@ -232,61 +181,5 @@
                 android:indeterminateDrawable="@drawable/progress_holo" />
         </LinearLayout>
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/pick_operation_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" >
-
-        <Button
-            android:id="@+id/button_pick_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/confirm" />
-
-        <Button
-            android:id="@+id/button_pick_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/operation_cancel" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/operation_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" >
-
-        <TextView
-            android:id="@+id/button_operation_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/operation_delete" />
-
-        <TextView
-            android:id="@+id/button_operation_copy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/operation_copy" />
-
-        <TextView
-            android:id="@+id/button_operation_move"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/operation_move" />
-
-        <TextView
-            android:id="@+id/button_operation_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/operation_send" />
-
-        <TextView
-            android:id="@+id/button_operation_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/operation_cancel" />
-    </LinearLayout>
 
 </LinearLayout>

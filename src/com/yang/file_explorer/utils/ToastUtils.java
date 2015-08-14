@@ -6,7 +6,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
 
-public class ToastUtils {
+public final class ToastUtils {
   
 	private Context mContext = null;
 	private static ToastUtils mToastUtils = null;

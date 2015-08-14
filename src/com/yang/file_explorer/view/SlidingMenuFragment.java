@@ -1,8 +1,8 @@
 package com.yang.file_explorer.view;
 
 import com.yang.file_explorer.R;
-import com.yang.file_explorer.entity.MenuItemType;
 import com.yang.file_explorer.ui.MainActivity;
+import com.yang.file_explorer.utils.MenuUtils.MenuItemType;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_bg"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="64.0dip"
+        android:orientation="horizontal" >
+
+        <FrameLayout
+            android:id="@+id/file_checkbox_area"
+            android:layout_width="0.0dip"
+            android:layout_height="0.0dip"
+            android:layout_gravity="center"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/file_checkbox"
+                android:layout_width="0.0dip"
+                android:layout_height="0.0dip"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="42.0dip"
+            android:layout_height="42.0dip"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8.0dip" >
+
+            <ImageView
+                android:id="@+id/file_image_frame"
+                android:layout_width="0.0px"
+                android:layout_height="0.0px"
+                android:layout_centerInParent="true"
+                android:background="@drawable/image_icon_bg"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/file_image"
+                android:layout_width="42.0dip"
+                android:layout_height="42.0dip"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_apk_filetype" />
+
+            <ImageView
+                android:id="@+id/favorite_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_star_filetype" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/file_info_layout"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="4.0dip"
+            android:layout_marginRight="8.0dip"
+            android:layout_weight="1.0"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/file_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="2"
+                    android:text="这个是测试文件名用的文字.jpg"
+                    android:textColor="#ff222222"
+                    android:textSize="14.0sp" />
+
+                <TextView
+                    android:id="@+id/file_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5.0dip"
+                    android:singleLine="true"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/modified_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:textAppearance="?android:textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/file_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="14.0px"
+                    android:gravity="left"
+                    android:textAppearance="?android:textAppearanceSmall" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:background="#ffdddddd" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:background="#ffdddddd" />
+
+</LinearLayout>
