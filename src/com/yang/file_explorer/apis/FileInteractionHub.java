@@ -18,6 +18,7 @@ import com.yang.file_explorer.entity.GlobalConsts;
 import com.yang.file_explorer.interfaces.IFileInteractionListener;
 import com.yang.file_explorer.interfaces.IOperationProgressListener;
 import com.yang.file_explorer.ui.MainActivity;
+import com.yang.file_explorer.utils.FileUtil;
 import com.yang.file_explorer.utils.LogUtils;
 
 public class FileInteractionHub implements IOperationProgressListener {
@@ -115,10 +116,10 @@ public class FileInteractionHub implements IOperationProgressListener {
 					.findViewById(R.id.file_checkbox);
 			if (selected) {
 				mCheckedFileNameList.remove(lFileInfo);
-				checkBox.setImageResource(R.drawable.btn_check_on);
+				checkBox.setImageResource(R.drawable.btn_check_off);
 			} else {
 				mCheckedFileNameList.add(lFileInfo);
-				checkBox.setImageResource(R.drawable.btn_check_off);
+				checkBox.setImageResource(R.drawable.btn_check_on);
 			}
 			if (actionMode != null) {
 				if (mCheckedFileNameList.size() == 0)
@@ -128,6 +129,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 			}
 			lFileInfo.Selected = !selected;
 
+			FileUtil.updateActionModeTitle(actionMode, mContext, getSelectedFileList().size());
 			return;
 		}
 
@@ -200,7 +202,15 @@ public class FileInteractionHub implements IOperationProgressListener {
 			LogUtils.e(LOG_TAG, "fail to view file: " + e.toString());
 		}
 	}
+	
+	/*
+	 * 是否全部选中
+	 */
 
+	public boolean isAllSelection(){
+		return mCheckedFileNameList.size() == mFileInteractionListener.getAllFiles().size();
+	}
+	
 	/*
 	 * 是否在文件选中状态
 	 */

@@ -1,5 +1,7 @@
 package com.yang.file_explorer.interfaces;
 
+import java.util.Collection;
+
 import com.yang.file_explorer.apis.FileSortHelper;
 import com.yang.file_explorer.entity.FileInfo;
 
@@ -23,5 +25,7 @@ public interface IFileInteractionListener {
 	public void sortCurrentList(FileSortHelper sort);
 
 	public boolean onRefreshFileList(String path, FileSortHelper sort);
+
+	public Collection<FileInfo> getAllFiles();
 
 }

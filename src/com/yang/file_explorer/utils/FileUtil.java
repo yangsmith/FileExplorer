@@ -225,9 +225,11 @@ public class FileUtil {
 	/*
 	 * ActionMode 显示选中的个数
 	 */
-	public static void updateActionModeTitle(ActionMode mode,Button btntitle, Context context, int selectedNum) {
+	public static void updateActionModeTitle(ActionMode mode, Context context, int selectedNum) {
         if (mode != null) {
-        	btntitle.setText(context.getString(R.string.multi_select_title,selectedNum));
+        	View view = mode.getCustomView();
+        	Button btnTitle = (Button)view.findViewById(R.id.selection_menu);
+        	btnTitle.setText(context.getString(R.string.multi_select_title,selectedNum));
             if(selectedNum == 0){
                 mode.finish();
             }

@@ -1,6 +1,9 @@
 package com.yang.file_explorer.view;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -101,5 +104,11 @@ public class FileCategoryFragment extends SherlockFragment implements IFileInter
 	public boolean onRefreshFileList(String path, FileSortHelper sort) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public ArrayList<FileInfo> getAllFiles() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

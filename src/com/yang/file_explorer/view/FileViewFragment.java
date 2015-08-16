@@ -221,4 +221,10 @@ public class FileViewFragment extends SherlockFragment implements
 		onDataChanged();
 	}
 
+	@Override
+	public ArrayList<FileInfo> getAllFiles() {
+		// TODO Auto-generated method stub
+		return mFileNameList;
+	}
+
 }
