@@ -16,6 +16,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
@@ -42,7 +43,7 @@ public class FileUtil {
 	 * 获取外存储SD卡路径
 	 */
 	public static String getSdDirectory() {
-		return Environment.getExternalStorageDirectory().getPath();
+		return Environment.getExternalStorageDirectory().getAbsolutePath();
 	}
 
 	/*
@@ -225,14 +226,18 @@ public class FileUtil {
 	/*
 	 * ActionMode 显示选中的个数
 	 */
-	public static void updateActionModeTitle(ActionMode mode, Context context, int selectedNum) {
-        if (mode != null) {
-        	View view = mode.getCustomView();
-        	Button btnTitle = (Button)view.findViewById(R.id.selection_menu);
-        	btnTitle.setText(context.getString(R.string.multi_select_title,selectedNum));
-            if(selectedNum == 0){
-                mode.finish();
-            }
-        }
-    }
+	public static void updateActionModeTitle(ActionMode mode, Context context,
+			int selectedNum) {
+		if (mode != null) {
+			View view = mode.getCustomView();
+			Button btnTitle = (Button) view.findViewById(R.id.selection_menu);
+			btnTitle.setText(context.getString(R.string.multi_select_title,
+					selectedNum));
+			if (selectedNum == 0) {
+				mode.finish();
+			}
+		}
+	}
+
+	
 }

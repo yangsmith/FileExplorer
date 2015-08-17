@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.ActionMode;
@@ -27,6 +28,7 @@ import com.yang.file_explorer.apis.FileInteractionHub.Mode;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.FileUtil;
+import com.yang.file_explorer.utils.ToastUtils;
 
 public class FileListItem {
 
@@ -118,6 +120,8 @@ public class FileListItem {
 				} else {
 					fileInfo.Selected = !fileInfo.Selected;
 				}
+				
+				
 
 				FileUtil.updateActionModeTitle(actionMode, mContext,
 						mfileInteractionHub.getSelectedFileList().size());
@@ -136,12 +140,13 @@ public class FileListItem {
 	}
 
 	public static class ModeCallback implements ActionMode.Callback,
-			OnClickListener, OnItemClickListener {
+			OnClickListener {
 
 		private Menu mMenu;
 		private Button btnTitle;
 		private Context mContext;
 		private FileInteractionHub mfInteractionHub;
+		private PopupWindow mpopupFilter = null;
 
 		public ModeCallback(Context context,
 				FileInteractionHub fileInteractionHub) {
@@ -174,7 +179,8 @@ public class FileListItem {
 			// TODO Auto-generated method stub
 			switch (item.getItemId()) {
 			case R.id.delete: // 删除操作
-
+				 mfInteractionHub.onOperationDelete();
+                 mode.finish();
 				break;
 
 			case R.id.copy: // 复制操作
@@ -221,17 +227,31 @@ public class FileListItem {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-	
-			//if (mfInteractionHub.isAllSelection()) {
+	       
+			if (mfInteractionHub.isAllSelection()) {
 				// 全选时，创建取消菜单
 				LinearLayout layout = (LinearLayout) View.inflate(mContext,
-						R.layout.dropdown, null);
-				ListView popListView = (ListView) layout
-						.findViewById(R.id.PopUpWindowlistView);
-				popListView.setAdapter(new SearchPopUpWindowAdapter(
-						new String[] { "全选" }, mContext));
-				popListView.setOnItemClickListener(this);
-				PopupWindow mpopupFilter = new PopupWindow(layout,
+						R.layout.select_all_dropdown, null);
+				Button btnSelAll = (Button)layout.findViewById(R.id.select_all);
+				btnSelAll.setVisibility(View.GONE);
+				Button btnCancel = (Button)layout.findViewById(R.id.cancel);
+				btnCancel.setVisibility(View.VISIBLE);
+				btnCancel.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						mfInteractionHub.clearSelection();
+						ActionMode mode = ((MainActivity)mContext).getActionMode();
+						if (mode != null) {
+							mode.finish();
+						}
+						mpopupFilter.dismiss();
+					}
+				});
+				
+				
+			    mpopupFilter = new PopupWindow(layout,
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				mpopupFilter
 						.setBackgroundDrawable(mContext
@@ -242,18 +262,36 @@ public class FileListItem {
 				mpopupFilter.setOutsideTouchable(true);
 				mpopupFilter.setTouchable(true);
 
-				mpopupFilter.showAsDropDown(v, 0, mContext.getResources()
-						.getDimensionPixelSize(R.dimen.menu_y));
-			//} else {
+				mpopupFilter.showAsDropDown(v, 0, 0);
+			} else {
+               
+				LinearLayout layout = (LinearLayout) View.inflate(mContext,
+						R.layout.select_all_dropdown, null);
+				Button btnSelAll = (Button)layout.findViewById(R.id.select_all);
+				btnSelAll.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						//点击全选
+						mfInteractionHub.onOperationSelectAll();
+						mpopupFilter.dismiss();
+					}
+				});
+				
+				mpopupFilter = new PopupWindow(layout,
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				mpopupFilter
+						.setBackgroundDrawable(mContext
+								.getResources()
+								.getDrawable(
+										R.drawable.menu_item_selecter));
+				mpopupFilter.setFocusable(true);
+				mpopupFilter.setOutsideTouchable(true);
+				mpopupFilter.setTouchable(true);
 
-			//}
-		}
-
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			// TODO Auto-generated method stub
-
+				mpopupFilter.showAsDropDown(v, 0, 0);
+			}
 		}
 
 	}

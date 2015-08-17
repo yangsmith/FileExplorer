@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ff1e1e1e"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/select_all"
+        android:layout_width="178.0dip"
+        android:layout_height="48.0dip"
+        android:background="@drawable/menu_item_selecter"
+        android:gravity="center_vertical"
+        android:paddingLeft="16.0dip"
+        android:text="@string/operation_selectall"
+        android:textColor="#ffeeeeee"
+        android:textSize="18.0sp" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="178.0dip"
+        android:layout_height="48.0dip"
+        android:background="@drawable/menu_item_selecter"
+        android:gravity="center_vertical"
+        android:paddingLeft="16.0dip"
+        android:text="@string/operation_cancel"
+        android:textColor="#ffeeeeee"
+        android:textSize="18.0sp"
+        android:visibility="gone" />
+
+</LinearLayout>
