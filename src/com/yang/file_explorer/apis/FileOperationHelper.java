@@ -17,25 +17,21 @@ public class FileOperationHelper {
 	private ArrayList<FileInfo> mCurFileNameList = new ArrayList<FileInfo>();
 
 	private IOperationProgressListener moperationListener;
-	
+
 	private FilenameFilter mFilter = null;
 
 	public FileOperationHelper(IOperationProgressListener l) {
 		moperationListener = l;
 	}
-	
-	  public void setFilenameFilter(FilenameFilter f) {
-	        mFilter = f;
-	    }
 
-	private void copyFileList(ArrayList<FileInfo> files) {
-		synchronized (mCurFileNameList) {
-			mCurFileNameList.clear();
-			for (FileInfo f : files) {
-				mCurFileNameList.add(f);
-			}
-		}
+	public void setFilenameFilter(FilenameFilter f) {
+		mFilter = f;
 	}
+
+	public void Copy(ArrayList<FileInfo> files) {
+		copyFileList(files);
+	}
+
 
 	public void clear() {
 		synchronized (mCurFileNameList) {
@@ -85,8 +81,8 @@ public class FileOperationHelper {
 	}
 
 	protected void DeleteFile(FileInfo f) {
-		if (f == null) 
-			  return;
+		if (f == null)
+			return;
 
 		File file = new File(f.filePath);
 		boolean directory = file.isDirectory();
@@ -99,5 +95,15 @@ public class FileOperationHelper {
 		}
 
 		file.delete();
+	}
+	
+	
+	private void copyFileList(ArrayList<FileInfo> files) {
+		synchronized (mCurFileNameList) {
+			mCurFileNameList.clear();
+			for (FileInfo f : files) {
+				mCurFileNameList.add(f);
+			}
+		}
 	}
 }

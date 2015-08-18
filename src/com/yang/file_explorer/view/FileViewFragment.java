@@ -67,6 +67,8 @@ public class FileViewFragment extends SherlockFragment implements
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		mActivity = (MainActivity) getActivity();
+		mActivity.setFileViewFragment(this);
+		
 		setHasOptionsMenu(true);
 		mRootView = inflater.inflate(R.layout.file_explorer_list, container,
 				false);
@@ -102,6 +104,7 @@ public class FileViewFragment extends SherlockFragment implements
 		if (sdCardReady) {
 			mFileInteractionHub.refreshFileList();
 		}
+		
 	}
 
 	// 当文件夹无文件时显示空文件图标
@@ -147,6 +150,16 @@ public class FileViewFragment extends SherlockFragment implements
 //		});
 		return true;
 	}
+	
+	/*
+	 * 返回
+	 */
+	 public boolean onBack() {
+	        if ( !FileUtil.isSDCardReady() || mFileInteractionHub == null) {
+	            return false;
+	        }
+	        return mFileInteractionHub.onBackPressed();
+	    }
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -155,7 +168,7 @@ public class FileViewFragment extends SherlockFragment implements
 			return;
 		}
 
-		MenuUtils.getInstance().addMenu(menu);
+		MenuUtils.getInstance(mActivity,mFileInteractionHub).addMenu(menu);
 
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -165,6 +178,7 @@ public class FileViewFragment extends SherlockFragment implements
 		// TODO Auto-generated method stub
 		return mActivity;
 	}
+	
 
 	@Override
 	public View getViewById(int id) {

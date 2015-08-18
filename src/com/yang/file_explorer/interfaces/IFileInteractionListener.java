@@ -6,6 +6,7 @@ import com.yang.file_explorer.apis.FileSortHelper;
 import com.yang.file_explorer.entity.FileInfo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 public interface IFileInteractionListener {
@@ -27,5 +28,8 @@ public interface IFileInteractionListener {
 	public boolean onRefreshFileList(String path, FileSortHelper sort);
 
 	public Collection<FileInfo> getAllFiles();
+
+	public void startActivity(Intent intent);
+	
 
 }

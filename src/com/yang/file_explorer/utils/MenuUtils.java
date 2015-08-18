@@ -1,19 +1,23 @@
 package com.yang.file_explorer.utils;
 
+import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
-
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.view.SubMenu;
 import com.yang.file_explorer.R;
+import com.yang.file_explorer.apis.FileInteractionHub;
+import com.yang.file_explorer.entity.GlobalConsts;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.ui.SearchActivity;
 
 public class MenuUtils implements OnMenuItemClickListener {
 
+	private Context mContext;
+	private FileInteractionHub mFileInteractionHub;
 	public enum MenuItemType {
 		MENU_DEVICE, MENU_FAVORITE, MENU_WIFI, MENU_MUSIC, MENU_IMAGE, MENU_VIDEO, MENU_DOCUMENT, MENU_ZIP, MENU_APK
 	}
@@ -21,12 +25,14 @@ public class MenuUtils implements OnMenuItemClickListener {
 	private static MenuUtils mmenuMenuUtils = null;
 
 	// 创建实例
-	private MenuUtils() {
+	private MenuUtils(Context context,FileInteractionHub fileInteractionHub) {
+		mContext = context;
+		mFileInteractionHub = fileInteractionHub;
 	}
 
-	public static MenuUtils getInstance() {
+	public static MenuUtils getInstance(Context context,FileInteractionHub fileInteractionHub) {
 		if (mmenuMenuUtils == null) {
-			mmenuMenuUtils = new MenuUtils();
+			mmenuMenuUtils = new MenuUtils(context,fileInteractionHub);
 		}
 
 		return mmenuMenuUtils;
@@ -88,17 +94,23 @@ public class MenuUtils implements OnMenuItemClickListener {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case 11: // 时间排序
-			ToastUtils.getInstance().showMask("时间排序", Toast.LENGTH_LONG);
+			item.setChecked(true);
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_SORT_DATE);
 			break;
 		case 12: // 名字排序
-			ToastUtils.getInstance().showMask("名字排序", Toast.LENGTH_LONG);
+			item.setChecked(true);
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_SORT_NAME);
 			break;
 		case 13: // 大小排序
+			item.setChecked(true);
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_SORT_SIZE);
 			break;
 		case 14: // 类型排序
+			item.setChecked(true);
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_SORT_TYPE);
 			break;
 		case 2: // 新建
-			ToastUtils.getInstance().showMask("新建", Toast.LENGTH_LONG);
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_NEW_FOLDER);
 			break;
 		case 3: // 搜索
 			Intent intent = new Intent(MainActivity.getActivity(),
@@ -106,7 +118,7 @@ public class MenuUtils implements OnMenuItemClickListener {
 			MainActivity.getActivity().startActivity(intent);
 			break;
 		case 4: // 刷新
-			ToastUtils.getInstance().showMask("刷新", Toast.LENGTH_LONG);
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_REFRESH);
 			break;
 		case 5: // 设置
 
@@ -117,6 +129,7 @@ public class MenuUtils implements OnMenuItemClickListener {
 			break;
 
 		case 7: // 退出
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_EXIT);
 			break;
 
 		default:

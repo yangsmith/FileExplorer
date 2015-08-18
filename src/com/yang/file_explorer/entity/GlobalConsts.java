@@ -20,24 +20,31 @@
 package com.yang.file_explorer.entity;
 
 public abstract class GlobalConsts {
-    public static final String KEY_BASE_SD = "key_base_sd";
+	public static final String KEY_BASE_SD = "key_base_sd";
 
-    public static final String KEY_SHOW_CATEGORY = "key_show_category";
+	public static final String KEY_SHOW_CATEGORY = "key_show_category";
 
-    public static final String INTENT_EXTRA_TAB = "TAB";
+	public static final String INTENT_EXTRA_TAB = "TAB";
 
-    public static final String ROOT_PATH = "/";
+	public static final String ROOT_PATH = "/";
 
-    public static final String SDCARD_PATH = ROOT_PATH + "sdcard";
+	public static final String SDCARD_PATH = ROOT_PATH + "sdcard";
 
-    // Menu id
-    public static final int MENU_NEW_FOLDER = 100;
-    public static final int MENU_FAVORITE = 101;
-    public static final int MENU_COPY = 104;
-    public static final int MENU_PASTE = 105;
-    public static final int MENU_MOVE = 106;
-    public static final int MENU_SHOWHIDE = 117;
-    public static final int MENU_COPY_PATH = 118;
+	// Menu id
+	public static final int MENU_NEW_FOLDER = 100;
+	public static final int MENU_FAVORITE = 101;
+	public static final int MENU_COPY = 104;
+	public static final int MENU_PASTE = 105;
+	public static final int MENU_MOVE = 106;
+	public static final int MENU_SORT_NAME = 11;
+	public static final int MENU_SORT_SIZE = 12;
+	public static final int MENU_SORT_DATE = 13;
+	public static final int MENU_SORT_TYPE = 14;
+	public static final int MENU_REFRESH = 15;
+	public static final int MENU_EXIT = 16;
+	public static final int MENU_ABOUT = 15;
+	public static final int MENU_SHOWHIDE = 117;
+	public static final int MENU_COPY_PATH = 118;
 
-    public static final int OPERATION_UP_LEVEL = 3;
+	public static final int OPERATION_UP_LEVEL = 3;
 }

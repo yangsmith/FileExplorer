@@ -23,6 +23,7 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.view.ActionMode;
 import com.yang.file_explorer.apis.FileListItem.ModeCallback;
+import com.yang.file_explorer.apis.FileSortHelper.SortMethod;
 import com.yang.file_explorer.R;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.entity.GlobalConsts;
@@ -314,6 +315,32 @@ public class FileInteractionHub implements IOperationProgressListener {
 		}
 		
 	}
+	
+	/*
+	 * 返回到文件上一层目录
+	 */
+	public boolean onOperationUpLevel() {
+		
+		if (!mRootPath.equals(mCurrentPath)) {
+			mCurrentPath = new File(mCurrentPath).getParent();
+			refreshFileList();
+			return true;
+		}
+
+		return false;
+	}
+	
+	/*
+	 * 后退键事件
+	 */
+	public boolean onBackPressed() {
+		 if (isInSelection()) {
+			clearSelection();
+		} else if (!onOperationUpLevel()) {
+			return false;
+		}
+		return true;
+	}
 
 	// /////////////////////////////////////////////文件操作函数////////////////////////////////////////////////////////////////////////////
 	/*
@@ -392,6 +419,96 @@ public class FileInteractionHub implements IOperationProgressListener {
 		
 		dialog.show();
 	}
+	
+	/*
+	 * 复制文件
+	 */
+	public void onOperationCopy(ArrayList<FileInfo> files){
+		mFileOperationHelper.Copy(files);
+		clearSelection();
+	}
+	
+	/*
+	 * 
+	 */
+	
+	/*
+	 * 分享文件
+	 */
+	public void onOperationShare(){
+		ArrayList<FileInfo> selectedFileLists = getSelectedFileList();
+		for(FileInfo f : selectedFileLists){
+			if(f.IsDir){
+				AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.error_info_cant_send_folder)
+						                .setPositiveButton(R.string.confirm, null).create();
+				dialog.show();
+				return;
+			}
+		}
+		
+		Intent intent = IntentBuilder.buildSendFile(selectedFileLists);
+		if (intent != null) {
+			try {
+				mFileInteractionListener.startActivity(intent);
+			} catch (ActivityNotFoundException e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
+			clearSelection();
+		}
+	}
+	
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	/////////////////////////////////////////////////Menu 操作/////////////////////////////////////////////////////////////////////////////////////
+	public void onMenuOperation(int itemId){
+		switch (itemId) {
+		case GlobalConsts.MENU_NEW_FOLDER: //新建文件
+			
+			break;
+        case GlobalConsts.MENU_SORT_DATE:
+        	onSortChanged(SortMethod.date);
+        	break;
+        	
+        case GlobalConsts.MENU_SORT_NAME:
+        	onSortChanged(SortMethod.name);
+        	break;
+        	
+        case GlobalConsts.MENU_SORT_TYPE:
+        	onSortChanged(SortMethod.type);
+        	break;
+        	
+        case GlobalConsts.MENU_SORT_SIZE:
+        	onSortChanged(SortMethod.size);
+        	break;
+        	
+        case GlobalConsts.MENU_REFRESH:
+        	refreshFileList();
+        	break;
+        	
+        case GlobalConsts.MENU_EXIT:
+        	((MainActivity)mContext).exit();
+        	break;
+		default:
+			break;
+		}
+	}
+	
+	/*
+	 * 文件排序
+	 */
+	public void onSortChanged(SortMethod s) {
+		if (mFileSortHelper.getSortMethod() != s) {
+			mFileSortHelper.setSortMethog(s);
+			sortCurrentList();
+		}
+	}
+	
+	public void sortCurrentList() {
+		mFileInteractionListener.sortCurrentList(mFileSortHelper);
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

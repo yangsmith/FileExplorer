@@ -16,6 +16,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.yang.file_explorer.R;
+import com.yang.file_explorer.apis.FileInteractionHub;
 import com.yang.file_explorer.apis.FileSortHelper;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.interfaces.IFileInteractionListener;
@@ -26,15 +27,17 @@ import com.yang.file_explorer.utils.ToastUtils;
 public class FileCategoryFragment extends SherlockFragment implements IFileInteractionListener{
 
 	private MainActivity mActivity;
-	private View mfileExplorerCategoryView;
+	private View mRootView;
+	private FileInteractionHub mFileInteractionHub;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		mActivity = (MainActivity)getActivity();
 		setHasOptionsMenu(true);
-		mfileExplorerCategoryView = inflater.inflate(R.layout.file_explorer_category, container, false);
-		return mfileExplorerCategoryView;
+		mRootView = inflater.inflate(R.layout.file_explorer_list, container, false);
+		mFileInteractionHub = new FileInteractionHub(this);
+		return mRootView;
 	}
 	
 	@Override
@@ -45,7 +48,7 @@ public class FileCategoryFragment extends SherlockFragment implements IFileInter
 			return;
 		}
 		
-		MenuUtils.getInstance().addMenu(menu);
+		MenuUtils.getInstance(mActivity,mFileInteractionHub).addMenu(menu);
 		ToastUtils.getInstance().showMask("FileCategoryFragment Createmenu", Toast.LENGTH_LONG);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -67,7 +70,7 @@ public class FileCategoryFragment extends SherlockFragment implements IFileInter
 	@Override
 	public View getViewById(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		return mRootView.findViewById(id);
 	}
 
 	@Override

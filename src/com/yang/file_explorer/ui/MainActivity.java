@@ -6,17 +6,21 @@ import com.yang.file_explorer.R;
 import com.yang.file_explorer.slidingmenu.SlidingMenu;
 import com.yang.file_explorer.ui.base.BaseSlidingFragmentActivity;
 import com.yang.file_explorer.utils.MenuUtils.MenuItemType;
+import com.yang.file_explorer.view.FileViewFragment;
 import com.yang.file_explorer.view.SlidingMenuFragment;
+import com.yang.file_explorer.widget.TipDialog;
 
 import android.R.bool;
 import android.R.string;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,6 +42,8 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 	private FragmentTransaction mfragmentTransaction;
 	
 	private Fragment mcontentFragment;
+	
+	private FileViewFragment mFileViewFragment = null;
 	
 	private static Activity mActivity = null;
 	
@@ -159,6 +165,14 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 
 	}
 
+	public void setFileViewFragment(FileViewFragment FileViewFragment) {
+		this.mFileViewFragment = FileViewFragment;
+	}
+	
+	public Fragment getFileViewFragment(){
+		return mFileViewFragment;
+	}
+	
 	public void setActionMode(ActionMode actionMode) {
 		mActionMode = actionMode;
 	}
@@ -188,10 +202,53 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 
 		default:
 			bool = super.onOptionsItemSelected(item);
-			;
+		
 			break;
 		}
 		return bool;
 	}
+	
+	/*
+	 * 退出
+	 */
+	public void exit(){
+		Dialog dialog = new TipDialog(this).setTitle("确定退出程序?")
+				.setPositiveButton(R.string.cancel, new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						
+					}
+				})
+				.setNegativeButton(R.string.confirm, new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						finish();
+					}
+				})
+				.builderDialog();
+		
+		dialog.show();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		if(mFileViewFragment == null)
+			finish();
+		
+		
+		if (sm.isMenuShowing()) {
+			sm.showContent();
+		}else if (!mFileViewFragment.onBack()) {
+			exit();
+		}
+				
+	}
+	
+
 
 }

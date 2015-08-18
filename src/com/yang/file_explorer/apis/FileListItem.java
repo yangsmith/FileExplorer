@@ -190,6 +190,8 @@ public class FileListItem {
 				break;
 
 			case R.id.share: // 分享操作
+				mfInteractionHub.onOperationShare();
+				mode.finish();
 				break;
 
 			case R.id.favorite: // 收藏操作
