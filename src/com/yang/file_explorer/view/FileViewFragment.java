@@ -233,6 +233,7 @@ public class FileViewFragment extends SherlockFragment implements
 		// TODO Auto-generated method stub
 		Collections.sort(mFileNameList, sort.getComparator());
 		onDataChanged();
+		mActivity.setFileNum(mFileNameList.size());
 	}
 
 	@Override

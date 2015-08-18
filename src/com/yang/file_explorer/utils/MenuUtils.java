@@ -45,8 +45,8 @@ public class MenuUtils implements OnMenuItemClickListener {
 				.setIcon(R.drawable.ic_sort_actionbar);
 		subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-		addMenu(subMenu, 11, 0, R.string.menu_item_sort_date);
-		addMenu(subMenu, 12, 1, R.string.menu_item_sort_name);
+		addMenu(subMenu, 11, 0, R.string.menu_item_sort_name);
+		addMenu(subMenu, 12, 1, R.string.menu_item_sort_date);
 		addMenu(subMenu, 13, 2, R.string.menu_item_sort_size);
 		addMenu(subMenu, 14, 3, R.string.menu_item_sort_type);
 		subMenu.setGroupCheckable(0, true, true);

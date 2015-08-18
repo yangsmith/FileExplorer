@@ -97,9 +97,10 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 	public final void setShowSelFragments(MenuItemType menutype) {
 		currentmenuItemType = menutype;
 		getSlidingMenu().showContent();
-		; // 显示内容Fragment,隐藏Menu
+		// 显示内容Fragment,隐藏Menu
 		bmenuVisible = ((SlidingMenuFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.menu_fragment)).SelMenu(menutype);
+		setFileNum(mFileViewFragment.getAllFiles().size());
 		if (menutype == MenuItemType.MENU_DEVICE) {
 			setTitle(R.string.my_device);
 			mfragmentTransaction = getSupportFragmentManager()
@@ -184,6 +185,14 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 	// 设置标题
 	public final void setTitle(int resid) {
 		title.setText(resid);
+	}
+	
+	//设置文件数量
+	public final void setFileNum(int num){
+		if (filenum != null) {
+			filenum.setText(Integer.valueOf(num).toString());
+		}
+		
 	}
 
 	public static Activity getActivity() {

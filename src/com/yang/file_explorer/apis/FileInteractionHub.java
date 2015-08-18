@@ -1,7 +1,10 @@
 package com.yang.file_explorer.apis;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,6 +18,7 @@ import android.media.MediaScannerConnection;
 import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -467,7 +471,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 	public void onMenuOperation(int itemId){
 		switch (itemId) {
 		case GlobalConsts.MENU_NEW_FOLDER: //新建文件
-			
+			onOperationCreateFolder();
 			break;
         case GlobalConsts.MENU_SORT_DATE:
         	onSortChanged(SortMethod.date);
@@ -510,5 +514,34 @@ public class FileInteractionHub implements IOperationProgressListener {
 	public void sortCurrentList() {
 		mFileInteractionListener.sortCurrentList(mFileSortHelper);
 	}
+	
+	/*
+	 * 创建文件夹
+	 */
+	public void onOperationCreateFolder(){
+		//图片名称 时间命名
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date(System.currentTimeMillis());
+        String filename = format.format(date);
+        //创建File对象用于存储拍照的图片 SD卡根目录           
+        //File outputImage = new File(Environment.getExternalStorageDirectory(),test.jpg);
+        //存储至DCIM文件夹
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);  
+        File outputImage = new File(path,filename+".jpg");
+        try {
+            if(outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        //将File对象转换为Uri并启动照相程序
+        Uri imageUri = Uri.fromFile(outputImage);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //照相
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); //指定图片输出地址
+        ((MainActivity)mContext).startActivityForResult(intent,100); //启动照相
+	}
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
