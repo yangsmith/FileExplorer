@@ -60,6 +60,19 @@ public class FileOperationHelper {
 	}
 
 	/*
+	 * 创建文件夹
+	 */
+	
+	 public boolean CreateFolder(String path, String name) {
+	        File f = new File(FileUtil.makePath(path, name));
+	        if (f.exists())
+	            return false;
+
+	        return f.mkdir();
+	    }
+
+	
+	/*
 	 * 删除文件
 	 */
 	public boolean Delete(ArrayList<FileInfo> files) {
@@ -106,4 +119,6 @@ public class FileOperationHelper {
 			}
 		}
 	}
+	
+	
 }

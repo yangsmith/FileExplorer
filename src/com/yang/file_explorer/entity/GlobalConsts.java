@@ -47,4 +47,6 @@ public abstract class GlobalConsts {
 	public static final int MENU_COPY_PATH = 118;
 
 	public static final int OPERATION_UP_LEVEL = 3;
+	
+	public static final int TAKE_PHOTO = 1001;
 }

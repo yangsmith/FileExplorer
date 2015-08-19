@@ -151,7 +151,7 @@ public class FileUtil {
 	}
 
 	/*
-	 * 获取文件名
+	 * 从文件名中获取后缀名
 	 */
 	public static String getNameFromFilename(String filename) {
 		int dotPosition = filename.lastIndexOf('.');
@@ -160,6 +160,17 @@ public class FileUtil {
 		}
 		return "";
 	}
+	
+	/*
+	 * 从文件路径中获取文件名
+	 */
+	 public static String getNameFromFilepath(String filepath) {
+	        int pos = filepath.lastIndexOf('/');
+	        if (pos != -1) {
+	            return filepath.substring(pos + 1);
+	        }
+	        return "";
+	    }
 
 	/*
 	 * 采用了新的办法获取APK图标，之前的失败是因为android中存在的一个BUG,通过 appInfo.publicSourceDir =
@@ -223,6 +234,23 @@ public class FileUtil {
 		return lFileInfo;
 	}
 
+	public static FileInfo GetFileInfo(String filePath) {
+		File lFile = new File(filePath);
+		if (!lFile.exists())
+			return null;
+
+		FileInfo lFileInfo = new FileInfo();
+		lFileInfo.canRead = lFile.canRead();
+		lFileInfo.canWrite = lFile.canWrite();
+		lFileInfo.isHidden = lFile.isHidden();
+		lFileInfo.fileName = FileUtil.getNameFromFilepath(filePath);
+		lFileInfo.ModifiedDate = lFile.lastModified();
+		lFileInfo.IsDir = lFile.isDirectory();
+		lFileInfo.filePath = filePath;
+		lFileInfo.fileSize = lFile.length();
+		return lFileInfo;
+	}
+
 	/*
 	 * ActionMode 显示选中的个数
 	 */
@@ -239,5 +267,4 @@ public class FileUtil {
 		}
 	}
 
-	
 }

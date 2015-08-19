@@ -114,4 +114,10 @@ public class FileCategoryFragment extends SherlockFragment implements IFileInter
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void addSingleFile(FileInfo file) {
+		// TODO Auto-generated method stub
+		
+	}
 }

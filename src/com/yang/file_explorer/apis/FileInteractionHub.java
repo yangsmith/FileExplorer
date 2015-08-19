@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import android.R.drawable;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -19,16 +21,23 @@ import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.ActionMode;
+import com.yang.file_explorer.adapter.CreateFileListAdater;
 import com.yang.file_explorer.apis.FileListItem.ModeCallback;
 import com.yang.file_explorer.apis.FileSortHelper.SortMethod;
 import com.yang.file_explorer.R;
+import com.yang.file_explorer.entity.FileIcon;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.entity.GlobalConsts;
 import com.yang.file_explorer.interfaces.IFileInteractionListener;
@@ -36,10 +45,14 @@ import com.yang.file_explorer.interfaces.IOperationProgressListener;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.FileUtil;
 import com.yang.file_explorer.utils.LogUtils;
+import com.yang.file_explorer.utils.ToastUtils;
+import com.yang.file_explorer.widget.CustomDialog;
 
 public class FileInteractionHub implements IOperationProgressListener {
 
 	private static final String LOG_TAG = "FileInteractionHub";
+	
+	private String createoutputImageName;
 
 	private IFileInteractionListener mFileInteractionListener;
 
@@ -50,7 +63,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 	private FileOperationHelper mFileOperationHelper;
 
 	private FileSortHelper mFileSortHelper;
-	
+
 	private ProgressDialog progressDialog;
 
 	private Context mContext;
@@ -92,7 +105,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 	}
 
 	/*
-	 * listview 事件 
+	 * listview 事件
 	 */
 	private void setupFileListView() {
 		mFileListView = (ListView) mFileInteractionListener
@@ -106,7 +119,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 			}
 		});
 	}
-	
+
 	private void showProgress(String msg) {
 		progressDialog = new ProgressDialog(mContext);
 		// dialog.setIcon(R.drawable.icon);
@@ -282,13 +295,13 @@ public class FileInteractionHub implements IOperationProgressListener {
 	@Override
 	public void onFinish() {
 		// TODO Auto-generated method stub
-        if (progressDialog != null) {
+		if (progressDialog != null) {
 			progressDialog.dismiss();
 			progressDialog = null;
 		}
-        
-        mFileInteractionListener.runOnUiThread(new Runnable() {
-			
+
+		mFileInteractionListener.runOnUiThread(new Runnable() {
+
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
@@ -301,9 +314,9 @@ public class FileInteractionHub implements IOperationProgressListener {
 	@Override
 	public void onFileChanged(String path) {
 		// TODO Auto-generated method stub
-        notifyFileSystemChanged(path);
+		notifyFileSystemChanged(path);
 	}
-	
+
 	/*
 	 * 通知扫描Sd卡
 	 */
@@ -312,20 +325,21 @@ public class FileInteractionHub implements IOperationProgressListener {
 			return;
 		final File f = new File(path);
 		if (f.isDirectory()) {
-			MediaScannerConnection.scanFile(mContext,new String[]{path}, null, null);
+			MediaScannerConnection.scanFile(mContext, new String[] { path },
+					null, null);
 		} else {
 			MediaScanner mediaScanner = new MediaScanner(mContext);
 			mediaScanner.scanFile(f, null);
 		}
-		
+
 	}
-	
+
 	/*
 	 * 返回到文件上一层目录
 	 */
 	public boolean onOperationUpLevel() {
-		
-		if (!mRootPath.equals(mCurrentPath)) {
+
+		if (!mRootPath.equals(mCurrentPath) && !mRootPath.contains(mCurrentPath)) {
 			mCurrentPath = new File(mCurrentPath).getParent();
 			refreshFileList();
 			return true;
@@ -333,12 +347,12 @@ public class FileInteractionHub implements IOperationProgressListener {
 
 		return false;
 	}
-	
+
 	/*
 	 * 后退键事件
 	 */
 	public boolean onBackPressed() {
-		 if (isInSelection()) {
+		if (isInSelection()) {
 			clearSelection();
 		} else if (!onOperationUpLevel()) {
 			return false;
@@ -394,62 +408,66 @@ public class FileInteractionHub implements IOperationProgressListener {
 		doOperationDelete(getSelectedFileList());
 	}
 
-	private void doOperationDelete(final ArrayList<FileInfo> selectedFileList){
-		final ArrayList<FileInfo> selectedFiles = new ArrayList<FileInfo>(selectedFileList);
-		
+	private void doOperationDelete(final ArrayList<FileInfo> selectedFileList) {
+		final ArrayList<FileInfo> selectedFiles = new ArrayList<FileInfo>(
+				selectedFileList);
+
 		Dialog dialog = new AlertDialog.Builder(mContext)
-				.setTitle(mContext.getString(R.string.operation_delete_confirm_message))
-				
-				 .setPositiveButton(R.string.confirm, new OnClickListener() {
-					
+				.setTitle(
+						mContext.getString(R.string.operation_delete_confirm_message))
+
+				.setPositiveButton(R.string.confirm, new OnClickListener() {
+
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						if (mFileOperationHelper.Delete(selectedFiles)) {
-							showProgress(mContext.getString(R.string.operation_delete));
+							showProgress(mContext
+									.getString(R.string.operation_delete));
 						}
 						clearSelection();
 					}
 				})
-				
+
 				.setNegativeButton(R.string.cancel, new OnClickListener() {
-					
+
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-						 clearSelection();
+						clearSelection();
 					}
 				}).create();
-		
+
 		dialog.show();
 	}
-	
+
 	/*
 	 * 复制文件
 	 */
-	public void onOperationCopy(ArrayList<FileInfo> files){
+	public void onOperationCopy(ArrayList<FileInfo> files) {
 		mFileOperationHelper.Copy(files);
 		clearSelection();
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	/*
 	 * 分享文件
 	 */
-	public void onOperationShare(){
+	public void onOperationShare() {
 		ArrayList<FileInfo> selectedFileLists = getSelectedFileList();
-		for(FileInfo f : selectedFileLists){
-			if(f.IsDir){
-				AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle(R.string.error_info_cant_send_folder)
-						                .setPositiveButton(R.string.confirm, null).create();
+		for (FileInfo f : selectedFileLists) {
+			if (f.IsDir) {
+				AlertDialog dialog = new AlertDialog.Builder(mContext)
+						.setTitle(R.string.error_info_cant_send_folder)
+						.setPositiveButton(R.string.confirm, null).create();
 				dialog.show();
 				return;
 			}
 		}
-		
+
 		Intent intent = IntentBuilder.buildSendFile(selectedFileLists);
 		if (intent != null) {
 			try {
@@ -458,49 +476,47 @@ public class FileInteractionHub implements IOperationProgressListener {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
-			
+
 			clearSelection();
 		}
 	}
-	
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
-	/////////////////////////////////////////////////Menu 操作/////////////////////////////////////////////////////////////////////////////////////
-	public void onMenuOperation(int itemId){
+
+	// ///////////////////////////////////////////////Menu操作///////////////////////////////////////////////////////////////////////////
+	public void onMenuOperation(int itemId) {
 		switch (itemId) {
-		case GlobalConsts.MENU_NEW_FOLDER: //新建文件
-			onOperationCreateFolder();
+		case GlobalConsts.MENU_NEW_FOLDER: // 新建文件
+			onOperationNewFile();
 			break;
-        case GlobalConsts.MENU_SORT_DATE:
-        	onSortChanged(SortMethod.date);
-        	break;
-        	
-        case GlobalConsts.MENU_SORT_NAME:
-        	onSortChanged(SortMethod.name);
-        	break;
-        	
-        case GlobalConsts.MENU_SORT_TYPE:
-        	onSortChanged(SortMethod.type);
-        	break;
-        	
-        case GlobalConsts.MENU_SORT_SIZE:
-        	onSortChanged(SortMethod.size);
-        	break;
-        	
-        case GlobalConsts.MENU_REFRESH:
-        	refreshFileList();
-        	break;
-        	
-        case GlobalConsts.MENU_EXIT:
-        	((MainActivity)mContext).exit();
-        	break;
+		case GlobalConsts.MENU_SORT_DATE:
+			onSortChanged(SortMethod.date);
+			break;
+
+		case GlobalConsts.MENU_SORT_NAME:
+			onSortChanged(SortMethod.name);
+			break;
+
+		case GlobalConsts.MENU_SORT_TYPE:
+			onSortChanged(SortMethod.type);
+			break;
+
+		case GlobalConsts.MENU_SORT_SIZE:
+			onSortChanged(SortMethod.size);
+			break;
+
+		case GlobalConsts.MENU_REFRESH:
+			refreshFileList();
+			break;
+
+		case GlobalConsts.MENU_EXIT:
+			((MainActivity) mContext).exit();
+			break;
 		default:
 			break;
 		}
 	}
-	
+
 	/*
 	 * 文件排序
 	 */
@@ -510,38 +526,183 @@ public class FileInteractionHub implements IOperationProgressListener {
 			sortCurrentList();
 		}
 	}
-	
+
 	public void sortCurrentList() {
 		mFileInteractionListener.sortCurrentList(mFileSortHelper);
 	}
-	
+
+	/*
+	 * 新建文件
+	 */
+	public void onOperationNewFile() {
+
+		LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+		View view = layoutInflater.inflate(R.layout.dialog_list_layout, null);
+		ListView fileListView = (ListView) view.findViewById(R.id.listView);
+
+		List<FileIcon> fileIconList = new ArrayList<FileIcon>();
+		FileIcon fileIcon1 = new FileIcon("文件夹", R.drawable.ic_folder_new);
+		fileIconList.add(fileIcon1);
+		FileIcon fileIcon2 = new FileIcon("拍照", R.drawable.ic_takephoto_new);
+		fileIconList.add(fileIcon2);
+
+		ArrayAdapter<FileIcon> fileAdapter = new CreateFileListAdater(mContext,
+				R.layout.create_file_list_item, fileIconList);
+		fileListView.setAdapter(fileAdapter);
+		
+		final Dialog dialog = new CustomDialog.Builder(mContext)
+				.setTitle(R.string.create).setContentView(view)
+				.setNegativeButton(R.string.cancel, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				}).create();
+		dialog.show();
+		
+		fileListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+				if (position == 0) {
+					// 创建文件夹
+					createFloder();
+				} else if (position == 1) {
+					// 拍照
+					createTakePhoto();
+				}
+			}
+		});
+
+	}
+
 	/*
 	 * 创建文件夹
 	 */
-	public void onOperationCreateFolder(){
-		//图片名称 时间命名
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date date = new Date(System.currentTimeMillis());
-        String filename = format.format(date);
-        //创建File对象用于存储拍照的图片 SD卡根目录           
-        //File outputImage = new File(Environment.getExternalStorageDirectory(),test.jpg);
-        //存储至DCIM文件夹
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);  
-        File outputImage = new File(path,filename+".jpg");
-        try {
-            if(outputImage.exists()) {
-                outputImage.delete();
-            }
-            outputImage.createNewFile();
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        //将File对象转换为Uri并启动照相程序
-        Uri imageUri = Uri.fromFile(outputImage);
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //照相
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); //指定图片输出地址
-        ((MainActivity)mContext).startActivityForResult(intent,100); //启动照相
+	private void createFloder() {
+		LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+		View view = layoutInflater.inflate(R.layout.dialog_input_layout, null);
+		final EditText editText = (EditText) view.findViewById(R.id.edit_text);
+		editText.setText("新建文件夹");
+
+		Dialog dialog = new CustomDialog.Builder(mContext)
+				.setTitle(R.string.create_folder_name).setContentView(view)
+				.setPositiveButton(R.string.cancel, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				}).setNegativeButton(R.string.confirm, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						if (editText != null) {
+							String textString = editText.getText().toString();
+							dialog.dismiss();
+							doCreateFolder(textString);
+						} else {
+							dialog.dismiss();
+						}
+
+					}
+				}).create();
+		dialog.show();
+	}
+
+	private boolean doCreateFolder(String text) {
+		if (TextUtils.isEmpty(text))
+			return false;
+
+		if (mFileOperationHelper.CreateFolder(mCurrentPath, text)) {
+			mFileInteractionListener.addSingleFile(FileUtil
+					.GetFileInfo(FileUtil.makePath(mCurrentPath, text)));
+			mFileListView.setSelection(mFileListView.getCount() - 1);
+		} else {
+			new AlertDialog.Builder(mContext)
+					.setMessage(
+							mContext.getString(R.string.fail_to_create_folder))
+					.setPositiveButton(R.string.confirm, null).create().show();
+			return false;
+		}
+
+		return true;
+	}
+
+	/*
+	 * 拍照
+	 */
+	private void createTakePhoto() {
+		LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+		View view = layoutInflater.inflate(R.layout.dialog_input_layout, null);
+		final EditText editText = (EditText) view.findViewById(R.id.edit_text);
+		editText.setText("照片");
+
+		Dialog dialog = new CustomDialog.Builder(mContext)
+				.setTitle(R.string.create_photo_name).setContentView(view)
+				.setPositiveButton(R.string.cancel, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				}).setNegativeButton(R.string.confirm, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+					
+						if (editText != null) {
+							String textString = editText.getText().toString();
+							dialog.dismiss();
+							doTakePhoto(textString);
+						} else {
+							dialog.dismiss();
+						}
+
+					}
+				}).create();
+		dialog.show();
+	}
+
+	private boolean doTakePhoto(String text) {
+		if (TextUtils.isEmpty(text))
+			return false;
+
+		createoutputImageName = text+".jpg";
+		File outputImage = new File(mCurrentPath, createoutputImageName);
+		try {
+			if (outputImage.exists()) {
+				outputImage.delete();
+			}
+			outputImage.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// 将File对象转换为Uri并启动照相程序
+		Uri imageUri = Uri.fromFile(outputImage);
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); // 照相
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); // 指定图片输出地址
+		mFileInteractionListener.startActivityForResult(intent,GlobalConsts.TAKE_PHOTO); // 启动照相
+		
+		return true;
 	}
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void addTakePhotoFile(){
+		String filePath = FileUtil.makePath(mCurrentPath, createoutputImageName);
+		mFileInteractionListener.addSingleFile(FileUtil
+				.GetFileInfo(filePath));
+		mFileListView.setSelection(mFileListView.getCount() - 1);
+		onFileChanged(filePath);
+	}
+	
+	// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

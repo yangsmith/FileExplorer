@@ -8,19 +8,20 @@ import com.yang.file_explorer.ui.base.BaseSlidingFragmentActivity;
 import com.yang.file_explorer.utils.MenuUtils.MenuItemType;
 import com.yang.file_explorer.view.FileViewFragment;
 import com.yang.file_explorer.view.SlidingMenuFragment;
-import com.yang.file_explorer.widget.TipDialog;
+import com.yang.file_explorer.widget.CustomDialog;
 
 import android.R.bool;
 import android.R.string;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -221,24 +222,25 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 	 * 退出
 	 */
 	public void exit(){
-		Dialog dialog = new TipDialog(this).setTitle("确定退出程序?")
+		Dialog dialog = new CustomDialog.Builder(this).setTitle("确定退出程序?")
 				.setPositiveButton(R.string.cancel, new OnClickListener() {
 					
 					@Override
-					public void onClick(View v) {
+					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-						
+						dialog.dismiss();
 					}
 				})
 				.setNegativeButton(R.string.confirm, new OnClickListener() {
 					
 					@Override
-					public void onClick(View v) {
+					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
+						dialog.dismiss();
 						finish();
 					}
 				})
-				.builderDialog();
+				.create();
 		
 		dialog.show();
 	}

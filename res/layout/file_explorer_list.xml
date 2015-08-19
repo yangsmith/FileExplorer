@@ -54,6 +54,7 @@
         android:background="#ffdddddd" >
 
         <HorizontalScrollView
+            android:id="@+id/horizontalscrollview"
             android:layout_width="wrap_content"
             android:layout_height="30.0dip"
             android:layout_alignParentRight="true"
