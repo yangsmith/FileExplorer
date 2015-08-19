@@ -412,29 +412,32 @@ public class FileInteractionHub implements IOperationProgressListener {
 		final ArrayList<FileInfo> selectedFiles = new ArrayList<FileInfo>(
 				selectedFileList);
 
-		Dialog dialog = new AlertDialog.Builder(mContext)
+		Dialog dialog = new CustomDialog.Builder(mContext)
 				.setTitle(
 						mContext.getString(R.string.operation_delete_confirm_message))
 
-				.setPositiveButton(R.string.confirm, new OnClickListener() {
+				.setPositiveButton(R.string.cancel, new OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
+						dialog.dismiss();
+						clearSelection();
+					}
+				})
+
+				.setNegativeButton(R.string.confirm, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
 						if (mFileOperationHelper.Delete(selectedFiles)) {
 							showProgress(mContext
 									.getString(R.string.operation_delete));
 						}
 						clearSelection();
-					}
-				})
-
-				.setNegativeButton(R.string.cancel, new OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						clearSelection();
+						
 					}
 				}).create();
 
