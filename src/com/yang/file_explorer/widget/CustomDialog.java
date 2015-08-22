@@ -200,6 +200,8 @@ public class CustomDialog extends Dialog {
 
 			if (mIconId != 0) {
 				((ImageView) layout.findViewById(R.id.icon))
+				.setVisibility(View.VISIBLE);
+				((ImageView) layout.findViewById(R.id.icon))
 						.setImageResource(mIconId);
 			}
 
@@ -246,7 +248,6 @@ public class CustomDialog extends Dialog {
 				}
 			} else {
 				// if no confirm button just set the visibility to GONE
-				layout.findViewById(R.id.buttons).setVisibility(View.GONE);
 				layout.findViewById(R.id.negativeButton).setVisibility(
 						View.GONE);
 			}

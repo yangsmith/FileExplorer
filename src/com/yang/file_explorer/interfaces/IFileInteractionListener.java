@@ -34,5 +34,7 @@ public interface IFileInteractionListener {
 	public void startActivityForResult(Intent intent,int requestCode);
 
 	public void addSingleFile(FileInfo file);
+	
+	public void ShowMovingOperationBar(boolean isShow);
 
 }

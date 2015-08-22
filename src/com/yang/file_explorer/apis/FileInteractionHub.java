@@ -2,12 +2,10 @@ package com.yang.file_explorer.apis;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import android.R.drawable;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -17,9 +15,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
-import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
-import android.os.Environment;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -30,7 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.actionbarsherlock.view.ActionMode;
 import com.yang.file_explorer.adapter.CreateFileListAdater;
@@ -45,13 +42,12 @@ import com.yang.file_explorer.interfaces.IOperationProgressListener;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.FileUtil;
 import com.yang.file_explorer.utils.LogUtils;
-import com.yang.file_explorer.utils.ToastUtils;
 import com.yang.file_explorer.widget.CustomDialog;
 
 public class FileInteractionHub implements IOperationProgressListener {
 
 	private static final String LOG_TAG = "FileInteractionHub";
-	
+
 	private String createoutputImageName;
 
 	private IFileInteractionListener mFileInteractionListener;
@@ -339,7 +335,8 @@ public class FileInteractionHub implements IOperationProgressListener {
 	 */
 	public boolean onOperationUpLevel() {
 
-		if (!mRootPath.equals(mCurrentPath) && !mRootPath.contains(mCurrentPath)) {
+		if (!mRootPath.equals(mCurrentPath)
+				&& !mRootPath.contains(mCurrentPath)) {
 			mCurrentPath = new File(mCurrentPath).getParent();
 			refreshFileList();
 			return true;
@@ -361,6 +358,39 @@ public class FileInteractionHub implements IOperationProgressListener {
 	}
 
 	// /////////////////////////////////////////////文件操作函数////////////////////////////////////////////////////////////////////////////
+
+	public void onOperationButtonConfirm() {
+		if (isInSelection()) {
+			clearSelection();
+		} else if (mFileOperationHelper.isMoveState()) {
+			if (mFileOperationHelper.EndMove(mCurrentPath)) {
+				showProgress(mContext.getString(R.string.operation_moving));
+			}
+		} else {
+			if (mFileOperationHelper.Paste(mCurrentPath)) {
+				showProgress(mContext.getString(R.string.operation_pasting));
+			}
+		}
+
+		mFileInteractionListener.ShowMovingOperationBar(false);
+	}
+
+	public void onOperationButtonCancel() {
+		mFileOperationHelper.clear();
+
+		if (isInSelection()) {
+			clearSelection();
+		} else if (mFileOperationHelper.isMoveState()) {
+			// refresh to show previously selected hidden files
+			mFileOperationHelper.EndMove(null);
+			refreshFileList();
+		} else {
+			refreshFileList();
+		}
+
+		mFileInteractionListener.ShowMovingOperationBar(false);
+	}
+
 	/*
 	 * 全选
 	 */
@@ -424,10 +454,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 						dialog.dismiss();
 						clearSelection();
 					}
-				})
-
-				.setNegativeButton(R.string.confirm, new OnClickListener() {
-
+				}).setNegativeButton(R.string.confirm, new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
@@ -437,7 +464,6 @@ public class FileInteractionHub implements IOperationProgressListener {
 									.getString(R.string.operation_delete));
 						}
 						clearSelection();
-						
 					}
 				}).create();
 
@@ -449,12 +475,19 @@ public class FileInteractionHub implements IOperationProgressListener {
 	 */
 	public void onOperationCopy(ArrayList<FileInfo> files) {
 		mFileOperationHelper.Copy(files);
+		mFileInteractionListener.ShowMovingOperationBar(true);
 		clearSelection();
 	}
 
 	/*
-	 * 
+	 * 剪切文件
 	 */
+	public void onOperationMove(ArrayList<FileInfo> files) {
+		mFileOperationHelper.StartMove(files);
+		mFileInteractionListener.ShowMovingOperationBar(true);
+		// refresh to hide selected files
+		refreshFileList();
+	}
 
 	/*
 	 * 分享文件
@@ -482,6 +515,150 @@ public class FileInteractionHub implements IOperationProgressListener {
 
 			clearSelection();
 		}
+	}
+
+	/*
+	 * 文件重命名
+	 */
+
+	public void onOperationRename() {
+
+		if (getSelectedFileList().size() == 0)
+			return;
+
+		final FileInfo f = getSelectedFileList().get(0);
+		clearSelection();
+
+		LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+		View view = layoutInflater.inflate(R.layout.dialog_input_layout, null);
+		final EditText editText = (EditText) view.findViewById(R.id.edit_text);
+		editText.setText(R.string.operation_rename_message);
+
+		Dialog dialog = new CustomDialog.Builder(mContext)
+				.setTitle(R.string.operation_rename).setContentView(view)
+				.setPositiveButton(R.string.cancel, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				}).setNegativeButton(R.string.confirm, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						if (editText != null) {
+							String textString = editText.getText().toString();
+							dialog.dismiss();
+							doRename(f, textString);
+						} else {
+							dialog.dismiss();
+						}
+
+					}
+				}).create();
+		dialog.show();
+
+	}
+
+	private boolean doRename(final FileInfo f, String text) {
+		if (TextUtils.isEmpty(text))
+			return false;
+
+		if (mFileOperationHelper.Rename(f, text)) {
+			f.fileName = text;
+			mFileInteractionListener.onDataChanged();
+		} else {
+			new AlertDialog.Builder(mContext)
+					.setMessage(mContext.getString(R.string.fail_to_rename))
+					.setPositiveButton(R.string.confirm, null).create().show();
+			return false;
+		}
+
+		return true;
+	}
+
+	/*
+	 * 文件详情
+	 */
+
+	public void onOperationdetail() {
+		if (getSelectedFileList().size() == 0)
+			return;
+
+		final FileInfo f = getSelectedFileList().get(0);
+		clearSelection();
+
+		int icon = 0;
+
+		LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+		View view = layoutInflater.inflate(R.layout.information_dialog, null);
+		((TextView) view.findViewById(R.id.information_location))
+				.setText(f.filePath);
+		;
+		((TextView) view.findViewById(R.id.information_modified))
+				.setText(FileUtil.formatDateString(mContext, f.ModifiedDate));
+		((TextView) view.findViewById(R.id.information_canwrite))
+				.setText(f.canWrite ? "是" : "否");
+		((TextView) view.findViewById(R.id.information_canread))
+				.setText(f.canRead ? "是" : "否");
+		((TextView) view.findViewById(R.id.information_ishidden))
+				.setText(f.isHidden ? "是" : "否");
+
+		final TextView filesizeviewTextView = (TextView) view
+				.findViewById(R.id.information_size);
+
+		if (f.IsDir) {
+			icon = R.drawable.ic_folder_filetype;
+			File file = new File(f.filePath);
+
+			new AsyncTask<File, Long, Void>() {
+
+				@Override
+				protected Void doInBackground(File... params) {
+					// TODO Auto-generated method stub
+
+					final File[] children = params[0].listFiles();
+					long total = 0;
+					if (children != null)
+						for (final File child : children) {
+							total += FileUtil.getTotalSizeOfFilesInDir(child);
+							publishProgress(total);
+						}
+
+					return null;
+				}
+
+				@Override
+				protected void onProgressUpdate(Long... values) {
+					filesizeviewTextView.setText(FileUtil
+							.convertStorage(values[0])
+							+ " ("
+							+ Long.valueOf(values[0]) + "字节)");
+				};
+
+			}.execute(file);
+
+		} else {
+			String ext = FileUtil.getExtFromFilename(f.fileName);
+			icon = FileIconHelper.getFileIcon(ext);
+			filesizeviewTextView.setText(FileUtil.convertStorage(f.fileSize)
+					+ " (" + Long.valueOf(f.fileSize) + "字节)");
+		}
+
+		Dialog dialog = new CustomDialog.Builder(mContext).setIcon(icon)
+				.setTitle(f.fileName).setContentView(view)
+				.setPositiveButton(R.string.confirm, new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				}).create();
+
+		dialog.show();
 	}
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -552,7 +729,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 		ArrayAdapter<FileIcon> fileAdapter = new CreateFileListAdater(mContext,
 				R.layout.create_file_list_item, fileIconList);
 		fileListView.setAdapter(fileAdapter);
-		
+
 		final Dialog dialog = new CustomDialog.Builder(mContext)
 				.setTitle(R.string.create).setContentView(view)
 				.setNegativeButton(R.string.cancel, new OnClickListener() {
@@ -564,7 +741,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 					}
 				}).create();
 		dialog.show();
-		
+
 		fileListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -662,7 +839,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-					
+
 						if (editText != null) {
 							String textString = editText.getText().toString();
 							dialog.dismiss();
@@ -680,7 +857,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 		if (TextUtils.isEmpty(text))
 			return false;
 
-		createoutputImageName = text+".jpg";
+		createoutputImageName = text + ".jpg";
 		File outputImage = new File(mCurrentPath, createoutputImageName);
 		try {
 			if (outputImage.exists()) {
@@ -694,18 +871,19 @@ public class FileInteractionHub implements IOperationProgressListener {
 		Uri imageUri = Uri.fromFile(outputImage);
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); // 照相
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); // 指定图片输出地址
-		mFileInteractionListener.startActivityForResult(intent,GlobalConsts.TAKE_PHOTO); // 启动照相
-		
+		mFileInteractionListener.startActivityForResult(intent,
+				GlobalConsts.TAKE_PHOTO); // 启动照相
+
 		return true;
 	}
-	
-	public void addTakePhotoFile(){
-		String filePath = FileUtil.makePath(mCurrentPath, createoutputImageName);
-		mFileInteractionListener.addSingleFile(FileUtil
-				.GetFileInfo(filePath));
+
+	public void addTakePhotoFile() {
+		String filePath = FileUtil
+				.makePath(mCurrentPath, createoutputImageName);
+		mFileInteractionListener.addSingleFile(FileUtil.GetFileInfo(filePath));
 		mFileListView.setSelection(mFileListView.getCount() - 1);
 		onFileChanged(filePath);
 	}
-	
+
 	// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

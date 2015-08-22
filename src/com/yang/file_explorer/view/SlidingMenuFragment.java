@@ -1,9 +1,15 @@
 package com.yang.file_explorer.view;
 
+import java.util.HashMap;
+
 import com.yang.file_explorer.R;
+import com.yang.file_explorer.apis.FileCategoryHelper;
+import com.yang.file_explorer.apis.FileCategoryHelper.CategoryInfo;
+import com.yang.file_explorer.apis.FileCategoryHelper.FileCategoryType;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.MenuUtils.MenuItemType;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class SlidingMenuFragment extends Fragment implements OnClickListener{
 
@@ -25,25 +32,36 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
 	
 	//音乐文件
 	private RelativeLayout music;
+	private TextView       musicnum;
 		
 	//视频文件
 	private RelativeLayout video;
+	private TextView       videonum;
 		
 	//图像文件
 	private RelativeLayout image;
+	private TextView       imagenum;
 		
 	//文本文件
 	private RelativeLayout document;
+	private TextView       documentnum;
 		
 	//压缩包文件
 	private RelativeLayout zip;
+	private TextView       zipnum;
 		
 	//apk文件
 	private RelativeLayout apk;
+	private TextView apknum;
 	
 	//选择菜单
 	private MenuItemType currentmenuItemType = MenuItemType.MENU_DEVICE;
 	
+	private FileCategoryHelper mFileCategoryHelper;
+	
+	private Context mContext;
+	
+	private HashMap<FileCategoryType,Long> fileNums = new HashMap<FileCategoryType, Long>();
 	
 	public void SlidingMenuFragment(){
 		
@@ -53,16 +71,29 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
     		Bundle savedInstanceState) {
     	// TODO Auto-generated method stub
+    	
+    	mContext = getActivity();
+    	
     	View menu = inflater.inflate(R.layout.main_slidingmenu,container, false);
     	device   = (RelativeLayout)menu.findViewById(R.id.device);
     	favorite = (RelativeLayout)menu.findViewById(R.id.favorite);
     	wifi     = (RelativeLayout)menu.findViewById(R.id.wifi);
     	music    = (RelativeLayout)menu.findViewById(R.id.music);
+    	musicnum = (TextView)menu.findViewById(R.id.music_num);
     	image    = (RelativeLayout)menu.findViewById(R.id.image);
+    	imagenum = (TextView)menu.findViewById(R.id.image_num);
     	video    = (RelativeLayout)menu.findViewById(R.id.video);
+    	videonum = (TextView)menu.findViewById(R.id.video_num);
     	document = (RelativeLayout)menu.findViewById(R.id.document);
+    	documentnum = (TextView)menu.findViewById(R.id.document_num);
     	zip      = (RelativeLayout)menu.findViewById(R.id.zip);
+    	zipnum = (TextView)menu.findViewById(R.id.zip_num);
     	apk      = (RelativeLayout)menu.findViewById(R.id.apk);
+    	apknum = (TextView)menu.findViewById(R.id.apk_num);
+    	
+    	mFileCategoryHelper = new FileCategoryHelper(mContext);
+    	mFileCategoryHelper.refreshCategoryInfo();
+    	
     	
     	//监听点击事件
     	device.setOnClickListener(this);
@@ -75,7 +106,7 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
     	zip.setOnClickListener(this);
     	apk.setOnClickListener(this);
     
-    	
+    	showFileNum();
     	return menu;
     }
     
@@ -86,6 +117,7 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
     }
     
     public boolean SelMenu(MenuItemType menuType){
+    	
     	device.setBackgroundResource(R.drawable.menu_item_selecter);
 		device.getChildAt(0).setVisibility(View.GONE);
 		
@@ -223,6 +255,44 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
 		}
 	}
 	
+	
+	private void showFileNum(){
+		
+		String sNumFormat = getResources().getString(R.string.file_num);
+		
+		CategoryInfo fCategoryInfo = mFileCategoryHelper.getCategoryInfo(FileCategoryType.Music);
+		fileNums.put(FileCategoryType.Music, Long.valueOf(fCategoryInfo.count));
+		musicnum.setText(String.format(sNumFormat, Long.valueOf(fCategoryInfo.count).toString()));
+		
+		fCategoryInfo = mFileCategoryHelper.getCategoryInfo(FileCategoryType.Video);
+		fileNums.put(FileCategoryType.Video, Long.valueOf(fCategoryInfo.count));
+		videonum.setText(String.format(sNumFormat, Long.valueOf(fCategoryInfo.count).toString()));
+		
+		fCategoryInfo = mFileCategoryHelper.getCategoryInfo(FileCategoryType.Doc);
+		fileNums.put(FileCategoryType.Doc, Long.valueOf(fCategoryInfo.count));
+		documentnum.setText(String.format(sNumFormat, Long.valueOf(fCategoryInfo.count).toString()));
+		
+		fCategoryInfo = mFileCategoryHelper.getCategoryInfo(FileCategoryType.Zip);
+		fileNums.put(FileCategoryType.Zip, Long.valueOf(fCategoryInfo.count));
+		zipnum.setText(String.format(sNumFormat, Long.valueOf(fCategoryInfo.count).toString()));
+		
+		fCategoryInfo = mFileCategoryHelper.getCategoryInfo(FileCategoryType.Apk);
+		fileNums.put(FileCategoryType.Apk, Long.valueOf(fCategoryInfo.count));
+		apknum.setText(String.format(sNumFormat, Long.valueOf(fCategoryInfo.count).toString()));
+		
+		fCategoryInfo = mFileCategoryHelper.getCategoryInfo(FileCategoryType.Picture);
+		fileNums.put(FileCategoryType.Picture, Long.valueOf(fCategoryInfo.count));
+		imagenum.setText(String.format(sNumFormat, Long.valueOf(fCategoryInfo.count).toString()));
+		
+	}
+	
 
+	public long getFilenum(FileCategoryType fc) {
+		if (fileNums.containsKey(fc)) {
+			return fileNums.get(fc).longValue();
+		} else {
+			return 0;
+		}
+	}
 	
 }

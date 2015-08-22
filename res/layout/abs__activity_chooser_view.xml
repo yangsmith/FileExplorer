@@ -32,7 +32,7 @@
         android:addStatesFromChildren="true"
         android:background="?attr/actionBarItemBackground">
 
-        <ImageView android:id="@+id/abs__image"
+        <ImageView android:id="@id/abs__image"
             android:layout_width="56dip"
             android:layout_height="36dip"
             android:layout_gravity="center"
@@ -54,7 +54,7 @@
         android:addStatesFromChildren="true"
         android:background="?attr/actionBarItemBackground">
 
-        <ImageView android:id="@+id/abs__image"
+        <ImageView android:id="@id/abs__image"
             android:layout_width="56dip"
             android:layout_height="36dip"
             android:layout_gravity="center"

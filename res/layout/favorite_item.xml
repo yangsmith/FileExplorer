@@ -78,7 +78,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/favorite"
+        android:id="@+id/favorite_area"
         android:layout_width="48.0dip"
         android:layout_height="fill_parent"
         android:layout_gravity="center"

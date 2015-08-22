@@ -18,26 +18,19 @@ public class MenuUtils implements OnMenuItemClickListener {
 
 	private Context mContext;
 	private FileInteractionHub mFileInteractionHub;
+
 	public enum MenuItemType {
 		MENU_DEVICE, MENU_FAVORITE, MENU_WIFI, MENU_MUSIC, MENU_IMAGE, MENU_VIDEO, MENU_DOCUMENT, MENU_ZIP, MENU_APK
 	}
 
 	private static MenuUtils mmenuMenuUtils = null;
 
-	// 创建实例
-	private MenuUtils(Context context,FileInteractionHub fileInteractionHub) {
+	// 构造函数
+	public MenuUtils(Context context, FileInteractionHub fileInteractionHub) {
 		mContext = context;
 		mFileInteractionHub = fileInteractionHub;
 	}
-
-	public static MenuUtils getInstance(Context context,FileInteractionHub fileInteractionHub) {
-		if (mmenuMenuUtils == null) {
-			mmenuMenuUtils = new MenuUtils(context,fileInteractionHub);
-		}
-
-		return mmenuMenuUtils;
-	}
-
+	
 	public boolean addMenu(Menu menu) {
 
 		// 排序菜单
@@ -113,9 +106,8 @@ public class MenuUtils implements OnMenuItemClickListener {
 			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_NEW_FOLDER);
 			break;
 		case 3: // 搜索
-			Intent intent = new Intent(MainActivity.getActivity(),
-					SearchActivity.class);
-			MainActivity.getActivity().startActivity(intent);
+			Intent intent = new Intent(mContext, SearchActivity.class);
+			((MainActivity) mContext).startActivity(intent);
 			break;
 		case 4: // 刷新
 			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_REFRESH);
@@ -125,7 +117,7 @@ public class MenuUtils implements OnMenuItemClickListener {
 			break;
 
 		case 6: // 关于
-			ToastUtils.getInstance().showMask("关于", Toast.LENGTH_LONG);
+			ToastUtils.getInstance(mContext).showMask("关于", Toast.LENGTH_LONG);
 			break;
 
 		case 7: // 退出

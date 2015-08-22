@@ -7,6 +7,29 @@
     <item name="abs__action_menu_presenter" type="id"/>
     <item name="abs__progress_circular" type="id"/>
     <item name="abs__progress_horizontal" type="id"/>
+    <item name="abs__action_bar_title" type="id">false</item>
+    <item name="abs__action_bar_subtitle" type="id">false</item>
+    <item name="abs__imageButton" type="id">false</item>
+    <item name="abs__textButton" type="id">false</item>
+    <item name="abs__action_mode_close_button" type="id">false</item>
+    <item name="abs__activity_chooser_view_content" type="id">false</item>
+    <item name="abs__expand_activities_button" type="id">false</item>
+    <item name="abs__image" type="id">false</item>
+    <item name="abs__default_activity_button" type="id">false</item>
+    <item name="abs__list_item" type="id">false</item>
+    <item name="abs__icon" type="id">false</item>
+    <item name="abs__title" type="id">false</item>
+    <item name="abs__titleDivider" type="id">false</item>
+    <item name="abs__content" type="id">false</item>
+    <item name="abs__checkbox" type="id">false</item>
+    <item name="abs__shortcut" type="id">false</item>
+    <item name="abs__radio" type="id">false</item>
+    <item name="abs__action_bar_container" type="id">false</item>
+    <item name="abs__action_bar" type="id">false</item>
+    <item name="abs__action_context_bar" type="id">false</item>
+    <item name="abs__split_action_bar" type="id">false</item>
+    <item name="abs__action_mode_bar_stub" type="id">false</item>
+    <item name="abs__action_mode_bar" type="id">false</item>
     <item name="icon" type="id">false</item>
     <item name="favorite" type="id">false</item>
     <item name="wifi" type="id">false</item>
@@ -26,8 +49,5 @@
     <item name="file_num" type="id"/>
     <item name="file_browse_frame" type="id"/>
     <item name="instruction" type="id"/>
-    
-    
-    
 
 </resources>

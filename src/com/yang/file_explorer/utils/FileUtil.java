@@ -1,7 +1,11 @@
 package com.yang.file_explorer.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -31,13 +35,16 @@ public class FileUtil {
 	public static HashSet<String> sDocMimeTypesSet = new HashSet<String>() {
 		{
 			add("text/plain");
-			add("text/plain");
+			add("text/html");
+			add("application/vnd.ms-powerpoint");
 			add("application/pdf");
 			add("application/msword");
 			add("application/vnd.ms-excel");
 			add("application/vnd.ms-excel");
 		}
 	};
+	
+	public static String sZipFileMimeType = "application/zip";
 
 	/*
 	 * 获取外存储SD卡路径
@@ -160,17 +167,29 @@ public class FileUtil {
 		}
 		return "";
 	}
-	
+
 	/*
 	 * 从文件路径中获取文件名
 	 */
-	 public static String getNameFromFilepath(String filepath) {
-	        int pos = filepath.lastIndexOf('/');
-	        if (pos != -1) {
-	            return filepath.substring(pos + 1);
-	        }
-	        return "";
-	    }
+	public static String getNameFromFilepath(String filepath) {
+		int pos = filepath.lastIndexOf('/');
+		if (pos != -1) {
+			return filepath.substring(pos + 1);
+		}
+		return "";
+	}
+
+	/*
+	 * 获取文件路径
+	 */
+
+	public static String getPathFromFilepath(String filepath) {
+		int pos = filepath.lastIndexOf('/');
+		if (pos != -1) {
+			return filepath.substring(0, pos);
+		}
+		return "";
+	}
 
 	/*
 	 * 采用了新的办法获取APK图标，之前的失败是因为android中存在的一个BUG,通过 appInfo.publicSourceDir =
@@ -192,6 +211,21 @@ public class FileUtil {
 			}
 		}
 		return null;
+	}
+
+	/*
+	 * 计算文件夹大小
+	 */
+
+	public static long getTotalSizeOfFilesInDir(final File file) {
+		if (file.isFile())
+			return file.length();
+		final File[] children = file.listFiles();
+		long total = 0;
+		if (children != null)
+			for (final File child : children)
+				total += getTotalSizeOfFilesInDir(child);
+		return total;
 	}
 
 	/*
@@ -225,7 +259,6 @@ public class FileUtil {
 				}
 			}
 			lFileInfo.Count = lCount;
-
 		} else {
 
 			lFileInfo.fileSize = lFile.length();
@@ -265,6 +298,68 @@ public class FileUtil {
 				mode.finish();
 			}
 		}
+	}
+
+	/*
+	 * 文件复制 return new file path if successful, or return null
+	 */
+	public static String copyFile(String src, String dest) {
+		File file = new File(src);
+		if (!file.exists() || file.isDirectory()) {
+			return null;
+		}
+
+		FileInputStream fi = null;
+		FileOutputStream fo = null;
+		try {
+			fi = new FileInputStream(file);
+			File destPlace = new File(dest);
+			if (!destPlace.exists()) {
+				if (!destPlace.mkdirs())
+					return null;
+			}
+
+			String destPath = FileUtil.makePath(dest, file.getName());
+			File destFile = new File(destPath);
+			int i = 1;
+			while (destFile.exists()) {
+				String destName = FileUtil.getNameFromFilename(file.getName())
+						+ " " + i++ + "."
+						+ FileUtil.getExtFromFilename(file.getName());
+				destPath = FileUtil.makePath(dest, destName);
+				destFile = new File(destPath);
+			}
+
+			if (!destFile.createNewFile())
+				return null;
+
+			fo = new FileOutputStream(destFile);
+			int count = 102400;
+			byte[] buffer = new byte[count];
+			int read = 0;
+			while ((read = fi.read(buffer, 0, count)) != -1) {
+				fo.write(buffer, 0, read);
+			}
+
+			// TODO: set access privilege
+
+			return destPath;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			LogUtils.e(LOG_TAG, "copyFile: " + e.toString());
+		} finally {
+			try {
+				if (fi != null)
+					fi.close();
+				if (fo != null)
+					fo.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
 	}
 
 }

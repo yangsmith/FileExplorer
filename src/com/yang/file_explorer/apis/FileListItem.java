@@ -96,6 +96,7 @@ public class FileListItem {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
+			case R.id.category_file_checkbox_area:
 			case R.id.file_checkbox_area: // 选择按钮点击事件
 			{
 				ImageView img = (ImageView) v.findViewById(R.id.file_checkbox);
@@ -133,6 +134,7 @@ public class FileListItem {
 
 			}
 				break;
+			
 			default:
 				break;
 			}
@@ -184,9 +186,13 @@ public class FileListItem {
 				break;
 
 			case R.id.copy: // 复制操作
+				mfInteractionHub.onOperationCopy(mfInteractionHub.getSelectedFileList());
+				mode.finish();
 				break;
 
 			case R.id.cut: // 剪切操作
+				mfInteractionHub.onOperationMove(mfInteractionHub.getSelectedFileList());
+				mode.finish();
 				break;
 
 			case R.id.share: // 分享操作
@@ -198,9 +204,13 @@ public class FileListItem {
 				break;
 
 			case R.id.rename: // 重命名操作
+				mfInteractionHub.onOperationRename();
+				mode.finish();
 				break;
 
 			case R.id.detail: // 详情操作
+				mfInteractionHub.onOperationdetail();
+				mode.finish();
 				break;
 
 			case R.id.compress: // 压缩操作

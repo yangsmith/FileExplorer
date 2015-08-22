@@ -185,8 +185,7 @@
                     android:layout_height="wrap_content"
                     android:text="0个文件"
                     android:textColor="#ff999999"
-                    android:textSize="14.0sp"
-                    android:visibility="gone" />
+                    android:textSize="14.0sp"/>
             </LinearLayout>
         </RelativeLayout>
 
@@ -235,8 +234,7 @@
                     android:layout_height="wrap_content"
                     android:text="0个文件"
                     android:textColor="#ff999999"
-                    android:textSize="14.0sp"
-                    android:visibility="gone" />
+                    android:textSize="14.0sp"/>
             </LinearLayout>
         </RelativeLayout>
 
@@ -285,8 +283,7 @@
                     android:layout_height="wrap_content"
                     android:text="0个文件"
                     android:textColor="#ff999999"
-                    android:textSize="14.0sp"
-                    android:visibility="gone" />
+                    android:textSize="14.0sp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -335,8 +332,7 @@
                     android:layout_height="wrap_content"
                     android:text="0个文件"
                     android:textColor="#ff999999"
-                    android:textSize="14.0sp"
-                    android:visibility="gone" />
+                    android:textSize="14.0sp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -385,8 +381,7 @@
                     android:layout_height="wrap_content"
                     android:text="0个文件"
                     android:textColor="#ff999999"
-                    android:textSize="14.0sp"
-                    android:visibility="gone" />
+                    android:textSize="14.0sp"/>
             </LinearLayout>
         </RelativeLayout>
 
@@ -435,8 +430,7 @@
                     android:layout_height="wrap_content"
                     android:text="0个文件"
                     android:textColor="#ff999999"
-                    android:textSize="14.0sp"
-                    android:visibility="gone" />
+                    android:textSize="14.0sp"/>
             </LinearLayout>
         </RelativeLayout>
 
