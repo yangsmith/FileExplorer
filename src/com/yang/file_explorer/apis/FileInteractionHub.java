@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import android.R.menu;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -15,10 +15,13 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
+import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -194,6 +197,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 	// check or uncheck
 	public boolean onCheckItem(FileInfo f, View v) {
 		switch (v.getId()) {
+		case R.id.category_file_checkbox_area:
 		case R.id.file_checkbox_area: {
 			if (f.Selected) {
 				mCheckedFileNameList.add(f);
@@ -319,15 +323,31 @@ public class FileInteractionHub implements IOperationProgressListener {
 	private void notifyFileSystemChanged(String path) {
 		if (path == null)
 			return;
-		final File f = new File(path);
-		if (f.isDirectory()) {
-			MediaScannerConnection.scanFile(mContext, new String[] { path },
-					null, null);
-		} else {
-			MediaScanner mediaScanner = new MediaScanner(mContext);
-			mediaScanner.scanFile(f, null);
-		}
 
+		// MediaScannerConnection.scanFile(mContext, new String[] { path },
+		// null, new OnScanCompletedListener() {
+		//
+		// @Override
+		// public void onScanCompleted(String path, Uri uri) {
+		// // TODO Auto-generated method stub
+		// //mFileInteractionListener.updateMediaData();
+		// LogUtils.d(LOG_TAG, "notifyFileSystemChanged");
+		// }
+		// });
+		
+		final File f = new File(path);
+		final Intent intent;
+		if (f.isDirectory()) {
+			intent = new Intent( "android.intent.action.MEDIA_SCANNER_SCAN_DIR");
+			intent.setData(Uri.fromFile(new File(path)));
+			Log.v(LOG_TAG,
+					"directory changed, send broadcast:" + intent.toString());
+		} else {
+			intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+			intent.setData(Uri.fromFile(new File(path)));
+			Log.v(LOG_TAG, "file changed, send broadcast:" + intent.toString());
+		}
+		mContext.sendBroadcast(intent);
 	}
 
 	/*

@@ -195,6 +195,7 @@ public class FileCategoryHelper {
 			setCategoryInfo(fc, 0, 0);
 		}
 
+		
 		// query database
 		String volumeName = "external";
 

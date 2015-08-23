@@ -38,7 +38,7 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 
 	private SlidingMenu sm;
 
-	private MenuItemType currentmenuItemType;
+	private MenuItemType mCurrentmenuItemType;
 	private TextView title;
 
 	private TextView filenum;
@@ -108,7 +108,7 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 
 	// 显示选择的碎片
 	public final void setShowSelFragments(MenuItemType menutype) {
-		currentmenuItemType = menutype;
+		mCurrentmenuItemType = menutype;
 		getSlidingMenu().showContent();
 		// 显示内容Fragment,隐藏Menu
 		bmenuVisible = mSlidingMenuFragment.SelMenu(menutype);
@@ -150,7 +150,7 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 				R.id.category_fragment));
 		mfragmentTransaction.hide(getSupportFragmentManager().findFragmentById(
 				R.id.ftp_fragment));
-		mfragmentTransaction.commit();
+		mfragmentTransaction.commitAllowingStateLoss();
 
 		switch (menutype) {
 		case MENU_FAVORITE:
@@ -191,6 +191,14 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 			break;
 		}
 
+	}
+	
+	public MenuItemType getCurrentMenuItemType(){
+		return mCurrentmenuItemType;
+	}
+	
+	public Fragment getSlidingMenuFragment(){
+		return mSlidingMenuFragment;
 	}
 
 	public void setFileViewFragment(FileViewFragment FileViewFragment) {

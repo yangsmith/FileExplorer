@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.test.TouchUtils;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -92,7 +93,7 @@ public class FileViewFragment extends SherlockFragment implements
 	private static final String sdDir = FileUtil.getSdDirectory();
 
 	private refreshFileAsyncTask mrefreshFileAsyncTask;
-	
+
 	private MenuUtils mMenuUtils;
 
 	private String mcurrentPath;
@@ -199,6 +200,7 @@ public class FileViewFragment extends SherlockFragment implements
 		if (isShow) {
 
 			mTitleOperationBar.setText(R.string.operation_paste);
+			setHasOptionsMenu(false);
 
 			ActionMode mode = mActivity.getActionMode();
 			if (mode != null) {
@@ -229,11 +231,11 @@ public class FileViewFragment extends SherlockFragment implements
 		}
 
 		mFileSortHelper = sort;
-		
+
 		mrefreshFileAsyncTask = new refreshFileAsyncTask();
 		mrefreshFileAsyncTask.execute(file);
 		mcurrentPath = path;
-		
+
 		showProgressBar(true);
 		createPathNavigation(mcurrentPath);
 
@@ -369,6 +371,22 @@ public class FileViewFragment extends SherlockFragment implements
 			break;
 		}
 
+		setHasOptionsMenu(true);
+
+	}
+
+	/*
+	 * 复制文件
+	 */
+	public void copyFile(ArrayList<FileInfo> files) {
+		mFileInteractionHub.onOperationCopy(files);
+	}
+
+     /*
+      * 剪切文件
+      */
+	public void moveToFile(ArrayList<FileInfo> files) {
+		mFileInteractionHub.onOperationMove(files);
 	}
 
 	/*
@@ -456,14 +474,15 @@ public class FileViewFragment extends SherlockFragment implements
 		@Override
 		protected Void doInBackground(File... files) {
 			// TODO Auto-generated method stub
-			
+
 			ArrayList<FileInfo> fileList = mFileNameList;
 			fileList.clear();
-			
-			File[] listFiles = files[0].listFiles(mFileCategoryHelper.getFilter());
+
+			File[] listFiles = files[0].listFiles(mFileCategoryHelper
+					.getFilter());
 			if (listFiles == null)
 				return null;
-			
+
 			for (File child : listFiles) {
 				String absolutePath = child.getAbsolutePath();
 				if (FileUtil.isNormalFile(absolutePath)
@@ -484,6 +503,17 @@ public class FileViewFragment extends SherlockFragment implements
 			// TODO Auto-generated method stub
 			showProgressBar(false);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.yang.file_explorer.interfaces.IFileInteractionListener#updateMediaData()
+	 * 媒体库更新后刷新
+	 */
+	@Override
+	public void updateMediaData() {
+		// TODO Auto-generated method stub
+		ToastUtils.getInstance(mActivity).showMask("Fileview  updateMediaData", Toast.LENGTH_SHORT);
 	}
 
 }

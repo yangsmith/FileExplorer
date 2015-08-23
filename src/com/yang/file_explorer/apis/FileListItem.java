@@ -28,7 +28,9 @@ import com.yang.file_explorer.apis.FileInteractionHub.Mode;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.FileUtil;
+import com.yang.file_explorer.utils.MenuUtils.MenuItemType;
 import com.yang.file_explorer.utils.ToastUtils;
+import com.yang.file_explorer.view.FileViewFragment;
 
 public class FileListItem {
 
@@ -121,8 +123,6 @@ public class FileListItem {
 				} else {
 					fileInfo.Selected = !fileInfo.Selected;
 				}
-				
-				
 
 				FileUtil.updateActionModeTitle(actionMode, mContext,
 						mfileInteractionHub.getSelectedFileList().size());
@@ -134,12 +134,15 @@ public class FileListItem {
 
 			}
 				break;
-			
+
 			default:
 				break;
 			}
 		}
 	}
+	
+	
+
 
 	public static class ModeCallback implements ActionMode.Callback,
 			OnClickListener {
@@ -154,6 +157,16 @@ public class FileListItem {
 				FileInteractionHub fileInteractionHub) {
 			mContext = context;
 			mfInteractionHub = fileInteractionHub;
+		}
+		
+		/*
+		 * 跳转至"我的设备"页面
+		 */
+		private void scrollToMydevice(){
+			MenuItemType menuItemType = ((MainActivity)mContext).getCurrentMenuItemType();
+			if (menuItemType != MenuItemType.MENU_DEVICE) {
+				((MainActivity)mContext).setShowSelFragments(MenuItemType.MENU_DEVICE);
+			}
 		}
 
 		@Override
@@ -181,18 +194,24 @@ public class FileListItem {
 			// TODO Auto-generated method stub
 			switch (item.getItemId()) {
 			case R.id.delete: // 删除操作
-				 mfInteractionHub.onOperationDelete();
-                 mode.finish();
+				mfInteractionHub.onOperationDelete();
+				mode.finish();
 				break;
 
 			case R.id.copy: // 复制操作
-				mfInteractionHub.onOperationCopy(mfInteractionHub.getSelectedFileList());
+				((FileViewFragment) ((MainActivity) mContext)
+						.getFileViewFragment()).copyFile(mfInteractionHub
+						.getSelectedFileList());
 				mode.finish();
+				scrollToMydevice();
 				break;
 
 			case R.id.cut: // 剪切操作
-				mfInteractionHub.onOperationMove(mfInteractionHub.getSelectedFileList());
+				((FileViewFragment) ((MainActivity) mContext)
+						.getFileViewFragment()).moveToFile(mfInteractionHub
+						.getSelectedFileList());
 				mode.finish();
+				scrollToMydevice();
 				break;
 
 			case R.id.share: // 分享操作
@@ -239,65 +258,65 @@ public class FileListItem {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-	       
+
 			if (mfInteractionHub.isAllSelection()) {
 				// 全选时，创建取消菜单
 				LinearLayout layout = (LinearLayout) View.inflate(mContext,
 						R.layout.select_all_dropdown, null);
-				Button btnSelAll = (Button)layout.findViewById(R.id.select_all);
+				Button btnSelAll = (Button) layout
+						.findViewById(R.id.select_all);
 				btnSelAll.setVisibility(View.GONE);
-				Button btnCancel = (Button)layout.findViewById(R.id.cancel);
+				Button btnCancel = (Button) layout.findViewById(R.id.cancel);
 				btnCancel.setVisibility(View.VISIBLE);
 				btnCancel.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						mfInteractionHub.clearSelection();
-						ActionMode mode = ((MainActivity)mContext).getActionMode();
+						ActionMode mode = ((MainActivity) mContext)
+								.getActionMode();
 						if (mode != null) {
 							mode.finish();
 						}
 						mpopupFilter.dismiss();
 					}
 				});
-				
-				
-			    mpopupFilter = new PopupWindow(layout,
+
+				mpopupFilter = new PopupWindow(layout,
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				mpopupFilter
-						.setBackgroundDrawable(mContext
-								.getResources()
-								.getDrawable(
-										R.drawable.menu_item_selecter));
+				mpopupFilter.setBackgroundDrawable(mContext.getResources()
+						.getDrawable(R.drawable.menu_item_selecter));
 				mpopupFilter.setFocusable(true);
 				mpopupFilter.setOutsideTouchable(true);
 				mpopupFilter.setTouchable(true);
 
 				mpopupFilter.showAsDropDown(v, 0, 0);
 			} else {
-               
+
 				LinearLayout layout = (LinearLayout) View.inflate(mContext,
 						R.layout.select_all_dropdown, null);
-				Button btnSelAll = (Button)layout.findViewById(R.id.select_all);
+				Button btnSelAll = (Button) layout
+						.findViewById(R.id.select_all);
 				btnSelAll.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						//点击全选
+						// 点击全选
 						mfInteractionHub.onOperationSelectAll();
+						FileUtil.updateActionModeTitle(
+								((MainActivity) mContext).getActionMode(),
+								mContext, mfInteractionHub
+										.getSelectedFileList().size());
 						mpopupFilter.dismiss();
 					}
 				});
-				
+
 				mpopupFilter = new PopupWindow(layout,
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				mpopupFilter
-						.setBackgroundDrawable(mContext
-								.getResources()
-								.getDrawable(
-										R.drawable.menu_item_selecter));
+				mpopupFilter.setBackgroundDrawable(mContext.getResources()
+						.getDrawable(R.drawable.menu_item_selecter));
 				mpopupFilter.setFocusable(true);
 				mpopupFilter.setOutsideTouchable(true);
 				mpopupFilter.setTouchable(true);
@@ -307,5 +326,9 @@ public class FileListItem {
 		}
 
 	}
+	
+	
+	
+	
 
 }

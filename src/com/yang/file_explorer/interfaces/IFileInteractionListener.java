@@ -36,5 +36,7 @@ public interface IFileInteractionListener {
 	public void addSingleFile(FileInfo file);
 	
 	public void ShowMovingOperationBar(boolean isShow);
+	
+	public void updateMediaData();
 
 }
