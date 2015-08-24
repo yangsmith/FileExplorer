@@ -47,6 +47,8 @@ public class FileCategoryHelper {
 	public static HashMap<FileCategoryType, FilenameExtFilter> filters = new HashMap<FileCategoryType, FilenameExtFilter>();
 
 	public static HashMap<FileCategoryType, Integer> categoryNames = new HashMap<FileCategoryType, Integer>();
+	
+	public static HashMap<String, FileCategoryType> fileExtCategoryType = new HashMap<String, FileCategoryHelper.FileCategoryType>();
 
 	static {
 		categoryNames.put(FileCategoryType.All, R.string.category_all);
@@ -61,6 +63,23 @@ public class FileCategoryHelper {
 		categoryNames
 				.put(FileCategoryType.Favorite, R.string.category_favorite);
 	}
+	
+
+	static {
+		addItem(new String[] { "mp4", "wmv", "mpeg", "m4v", "3gp", "3gpp", "3g2", "3gpp2", "asf","rmvb","avi" }, FileCategoryType.Video);
+		addItem(new String[] { "jpg", "jpeg", "gif", "png", "bmp", "wbmp" }, FileCategoryType.Picture);
+		addItem(new String[] { "mp3","wma","wav","ogg" }, FileCategoryType.Music);
+		
+	}
+
+	private static void addItem(String[] exts, FileCategoryType categoryType) {
+		if (exts != null) {
+			for (String ext : exts) {
+				fileExtCategoryType.put(ext.toLowerCase(), categoryType);
+			}
+		}
+	}
+	
 
 	public static FileCategoryType[] sCategories = new FileCategoryType[] {
 			FileCategoryType.Music, FileCategoryType.Video,
@@ -206,6 +225,7 @@ public class FileCategoryHelper {
 		refreshMediaCategory(FileCategoryType.Video, uri);
 
 		uri = Images.Media.getContentUri(volumeName);
+		   
 		refreshMediaCategory(FileCategoryType.Picture, uri);
 
 		uri = Files.getContentUri(volumeName);

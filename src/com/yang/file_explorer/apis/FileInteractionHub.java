@@ -94,8 +94,8 @@ public class FileInteractionHub implements IOperationProgressListener {
 
 		mFileInteractionListener = fileInteractionListener;
 		mFileSortHelper = new FileSortHelper();
-		mFileOperationHelper = new FileOperationHelper(this);
 		mContext = mFileInteractionListener.getContext();
+		mFileOperationHelper = new FileOperationHelper(this,mContext);
 		setup();
 	}
 

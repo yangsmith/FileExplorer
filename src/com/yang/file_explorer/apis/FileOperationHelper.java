@@ -4,7 +4,13 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
+import android.content.ContentProviderOperation;
+import android.content.Context;
+import android.content.OperationApplicationException;
 import android.os.AsyncTask;
+import android.os.RemoteException;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Files.FileColumns;
 import android.text.TextUtils;
 
 import com.yang.file_explorer.entity.FileInfo;
@@ -19,12 +25,17 @@ public class FileOperationHelper {
 
 	private IOperationProgressListener moperationListener;
 
+	private ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
 	private FilenameFilter mFilter = null;
+
+	private Context mContext;
 
 	private boolean mMoving;
 
-	public FileOperationHelper(IOperationProgressListener l) {
+	public FileOperationHelper(IOperationProgressListener l, Context context) {
 		moperationListener = l;
+		mContext = context;
 	}
 
 	public void setFilenameFilter(FilenameFilter f) {
@@ -52,10 +63,21 @@ public class FileOperationHelper {
 				synchronized (mCurFileNameList) {
 					_r.run();
 				}
+
+				try {
+					mContext.getContentResolver().applyBatch(
+							MediaStore.AUTHORITY, ops);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				} catch (OperationApplicationException e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+
 				if (moperationListener != null) {
 					moperationListener.onFinish();
 				}
-
+				ops.clear();
 				return null;
 			}
 		}.execute();
@@ -108,6 +130,13 @@ public class FileOperationHelper {
 			}
 		}
 
+		if (!f.IsDir) {
+			ops.add(ContentProviderOperation
+					.newDelete(FileUtil.getMediaUriFromFilename(f.fileName))
+					.withSelection("_data = ?", new String[] { f.filePath })
+					.build());
+		}
+
 		file.delete();
 	}
 
@@ -120,8 +149,8 @@ public class FileOperationHelper {
 		}
 
 		File file = new File(f.filePath);
-		String newPath = FileUtil.makePath(FileUtil.getPathFromFilepath(f.filePath),
-				newName);
+		String newPath = FileUtil.makePath(
+				FileUtil.getPathFromFilepath(f.filePath), newName);
 		final boolean needScan = file.isFile();
 		try {
 			boolean ret = file.renameTo(new File(newPath));
@@ -234,7 +263,21 @@ public class FileOperationHelper {
 				}
 			}
 		} else {
+
 			String destFile = FileUtil.copyFile(f.filePath, dest);
+
+			FileInfo destFileInfo = FileUtil.GetFileInfo(destFile);
+			ops.add(ContentProviderOperation
+					.newInsert(
+							FileUtil.getMediaUriFromFilename(destFileInfo.fileName))
+					.withValue(FileColumns.TITLE, destFileInfo.fileName)
+					.withValue(FileColumns.DATA, destFileInfo.filePath)
+					.withValue(
+							FileColumns.MIME_TYPE,
+							FileUtil.getMimetypeFromFilename(destFileInfo.fileName))
+					.withValue(FileColumns.DATE_MODIFIED,
+							destFileInfo.ModifiedDate)
+					.withValue(FileColumns.SIZE, destFileInfo.fileSize).build());
 		}
 
 	}
@@ -248,11 +291,50 @@ public class FileOperationHelper {
 		File file = new File(f.filePath);
 		String newPath = FileUtil.makePath(dest, f.fileName);
 		try {
-			return file.renameTo(new File(newPath));
+
+			File destFile = new File(newPath);
+
+			if (file.renameTo(destFile)) {
+				MoveFileToDB(destFile, file, destFile);
+				return true;
+			}
+
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	private void MoveFileToDB(File destFile, File srcFile, File rootFile) {
+
+		if (destFile.isDirectory()) {
+			for (File child : destFile.listFiles(mFilter)) {
+				if (!child.isHidden()
+						&& FileUtil.isNormalFile(child.getAbsolutePath())) {
+					MoveFileToDB(destFile, srcFile, rootFile);
+				}
+			}
+		} else {
+			int pos = -1;
+			String destFilePath = destFile.getAbsolutePath();
+			String srcFilePath = srcFile.getAbsolutePath();
+			String rootFilePath = rootFile.getAbsolutePath();
+			if (srcFile.isDirectory()
+					&& (pos = destFilePath.indexOf(rootFilePath)) != -1) {
+				srcFilePath = srcFilePath
+						+ destFilePath.substring(rootFilePath.length(),
+								destFilePath.length());
+			}
+
+			FileInfo desFileInfo = FileUtil.GetFileInfo(destFilePath);
+			ops.add(ContentProviderOperation
+					.newUpdate(
+							FileUtil.getMediaUriFromFilename(desFileInfo.fileName))
+					.withSelection("_data = ?",
+							new String[] { srcFilePath })
+					.withValue("_data", destFilePath).build());
+		}
+
 	}
 
 	private void copyFileList(ArrayList<FileInfo> files) {

@@ -12,6 +12,8 @@ import java.util.HashSet;
 
 import com.actionbarsherlock.view.ActionMode;
 import com.yang.file_explorer.R;
+import com.yang.file_explorer.apis.FileCategoryHelper;
+import com.yang.file_explorer.apis.FileCategoryHelper.FileCategoryType;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.entity.Settings;
 
@@ -22,7 +24,12 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore.Audio;
+import android.provider.MediaStore.Files;
+import android.provider.MediaStore.Images;
+import android.provider.MediaStore.Video;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -145,6 +152,41 @@ public class FileUtil {
 		} else
 			return String.format("%d B", size);
 	}
+	
+	/*
+	 *从文件名获取Mediauri 
+	 */
+	public static Uri getMediaUriFromFilename(String filename){
+		String extString = getExtFromFilename(filename);
+		String volumeName = "external";
+        FileCategoryType fileCategoryType = FileCategoryHelper.fileExtCategoryType.get(extString);
+		
+        Uri uri = null;
+        if (fileCategoryType == FileCategoryType.Music) {
+            uri = Audio.Media.getContentUri(volumeName);
+		}else if (fileCategoryType == FileCategoryType.Picture) {
+			uri = Images.Media.getContentUri(volumeName);
+		}else if(fileCategoryType == FileCategoryType.Video){
+			uri = Video.Media.getContentUri(volumeName);
+		}else {
+			uri = Files.getContentUri(volumeName);
+		}
+		return uri;
+	}
+	 
+	/*
+	 * 从文件名获取mimetye
+	 */
+	public static String getMimetypeFromFilename(String filename){
+		String mimetype = null;
+		String extString = getExtFromFilename(filename);
+		
+		MimeTypeMap mineMap = MimeTypeMap.getSingleton();
+		mimetype = mineMap.getMimeTypeFromExtension(extString);
+		
+		return mimetype;
+	}
+	
 
 	/*
 	 * 获取文件类型（后缀名）
