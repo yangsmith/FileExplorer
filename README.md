@@ -21,16 +21,18 @@ com.yang.file_explorer
 2.删除文件       
 3.刷新文件     
 4.文件排序     
-5.文件分享         
+5.文件分享    
+6.文件的复制、剪切        
+7.文件重命名
+
 
 #后续添加app文件操作功能：       
-1.文件的复制、剪切        
-2.文件搜索                 
-3.收藏文件并浏览                 
-4.ftp文件上传                   
-5.文件的压缩           
-6.文件重命名                 
-7.。。。。。。。。。            
+
+1.文件搜索                 
+2.收藏文件并浏览                 
+3.ftp文件上传                   
+4.文件的压缩           
+5.。。。。。。。。。            
 
 #预览动画：            
 ![image](https://github.com/yangsmith/File_Explorer/blob/master/bin/file_exploer.gif)
