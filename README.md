@@ -28,12 +28,10 @@ com.yang.file_explorer
 
 
 #后续添加app文件操作功能：       
-
-
-2.收藏文件并浏览                 
-3.ftp文件上传                   
-4.文件的压缩           
-5.。。。。。。。。。            
+1.收藏文件并浏览                 
+2.ftp文件上传                   
+3.文件的压缩           
+4.。。。。。。。。。            
 
 #预览动画：            
 ![image](https://github.com/yangsmith/File_Explorer/blob/master/bin/file_exploer.gif)
