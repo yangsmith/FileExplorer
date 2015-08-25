@@ -12,6 +12,7 @@ import android.provider.MediaStore.Files;
 import android.provider.MediaStore.Files.FileColumns;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
+import android.text.TextUtils;
 
 import com.yang.file_explorer.R;
 import com.yang.file_explorer.apis.FileSortHelper.SortMethod;
@@ -47,7 +48,7 @@ public class FileCategoryHelper {
 	public static HashMap<FileCategoryType, FilenameExtFilter> filters = new HashMap<FileCategoryType, FilenameExtFilter>();
 
 	public static HashMap<FileCategoryType, Integer> categoryNames = new HashMap<FileCategoryType, Integer>();
-	
+
 	public static HashMap<String, FileCategoryType> fileExtCategoryType = new HashMap<String, FileCategoryHelper.FileCategoryType>();
 
 	static {
@@ -63,13 +64,15 @@ public class FileCategoryHelper {
 		categoryNames
 				.put(FileCategoryType.Favorite, R.string.category_favorite);
 	}
-	
 
 	static {
-		addItem(new String[] { "mp4", "wmv", "mpeg", "m4v", "3gp", "3gpp", "3g2", "3gpp2", "asf","rmvb","avi" }, FileCategoryType.Video);
-		addItem(new String[] { "jpg", "jpeg", "gif", "png", "bmp", "wbmp" }, FileCategoryType.Picture);
-		addItem(new String[] { "mp3","wma","wav","ogg" }, FileCategoryType.Music);
-		
+		addItem(new String[] { "mp4", "wmv", "mpeg", "m4v", "3gp", "3gpp",
+				"3g2", "3gpp2", "asf", "rmvb", "avi" }, FileCategoryType.Video);
+		addItem(new String[] { "jpg", "jpeg", "gif", "png", "bmp", "wbmp" },
+				FileCategoryType.Picture);
+		addItem(new String[] { "mp3", "wma", "wav", "ogg" },
+				FileCategoryType.Music);
+
 	}
 
 	private static void addItem(String[] exts, FileCategoryType categoryType) {
@@ -79,7 +82,6 @@ public class FileCategoryHelper {
 			}
 		}
 	}
-	
 
 	public static FileCategoryType[] sCategories = new FileCategoryType[] {
 			FileCategoryType.Music, FileCategoryType.Video,
@@ -186,6 +188,38 @@ public class FileCategoryHelper {
 	}
 
 	/*
+	 * 查询指定文件
+	 */
+	public Cursor query(FileCategoryType fc, String fileName, SortMethod sort) {
+		if (TextUtils.isEmpty(fileName)) {
+			return null;
+		}
+
+		Uri uri = getContentUriByCategory(fc);
+		String selection = buildSelectionByCategory(fc);
+		
+		if (TextUtils.isEmpty(selection)) {
+			selection = FileColumns.TITLE
+					+ " LIKE '%" + fileName + "%'";
+		}else {
+			selection = selection + " AND "+ FileColumns.TITLE + " LIKE '%" + fileName + "%'";
+		}
+		
+		String sortOrder = buildSortOrder(sort);
+
+		if (uri == null) {
+			LogUtils.e(LOG_TAG, "invalid uri, category:" + fc.name());
+			return null;
+		}
+
+		String[] columns = new String[] { FileColumns._ID, FileColumns.DATA,
+				FileColumns.SIZE, FileColumns.DATE_MODIFIED };
+
+		return mContext.getContentResolver().query(uri, columns, selection,
+				null, sortOrder);
+	}
+
+	/*
 	 * 获取媒体内容提供器中分类文件
 	 */
 	public Cursor query(FileCategoryType fc, SortMethod sort) {
@@ -214,7 +248,6 @@ public class FileCategoryHelper {
 			setCategoryInfo(fc, 0, 0);
 		}
 
-		
 		// query database
 		String volumeName = "external";
 
@@ -225,7 +258,7 @@ public class FileCategoryHelper {
 		refreshMediaCategory(FileCategoryType.Video, uri);
 
 		uri = Images.Media.getContentUri(volumeName);
-		   
+
 		refreshMediaCategory(FileCategoryType.Picture, uri);
 
 		uri = Files.getContentUri(volumeName);
@@ -263,6 +296,7 @@ public class FileCategoryHelper {
 		String volumeName = "external";
 		switch (cat) {
 		case Theme:
+		case All:
 		case Doc:
 		case Zip:
 		case Apk:

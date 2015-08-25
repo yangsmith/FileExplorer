@@ -57,7 +57,8 @@
                 android:fastScrollEnabled="true"
                 android:footerDividersEnabled="true"
                 android:headerDividersEnabled="true"
-                android:listSelector="@null" />
+                android:listSelector="@null" 
+             />
 
             <TextView
                 android:id="@+id/empty_view"
@@ -84,7 +85,7 @@
             android:background="#ffededed"
             android:gravity="center"
             android:orientation="vertical"
-             android:visibility="gone">
+            android:visibility="gone">
 
             <ProgressBar
                 android:id="@+id/search_progress"
