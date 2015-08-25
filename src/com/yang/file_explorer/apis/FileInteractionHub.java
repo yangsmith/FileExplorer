@@ -287,6 +287,10 @@ public class FileInteractionHub implements IOperationProgressListener {
 	public Mode getMode() {
 		return mcurrentMode;
 	}
+	
+	public SortMethod getSortMethod() {
+		return mFileSortHelper.getSortMethod();
+	} 
 
 	public FileInfo getItem(int pos) {
 		return mFileInteractionListener.getItem(pos);

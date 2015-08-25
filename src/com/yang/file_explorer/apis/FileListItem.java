@@ -35,6 +35,35 @@ import com.yang.file_explorer.view.FileViewFragment;
 public class FileListItem {
 
 	private String LOG_TAG = "FileListItem";
+	
+	public static void setupFileListItemInfo(Context context, View view,
+			FileInfo fileInfo, FileIconHelper fileIcon) {
+
+		// 显示文件名、大小、修改时间、文件夹中文件数量
+		FileUtil.setText(view, R.id.file_name, fileInfo.fileName);
+		FileUtil.setText(view, R.id.file_count, fileInfo.IsDir ? "("
+				+ fileInfo.Count + ")" : "");
+		FileUtil.setText(view, R.id.modified_time,
+				FileUtil.formatDateString(context, fileInfo.ModifiedDate));
+		FileUtil.setText(
+				view,
+				R.id.file_size,
+				(fileInfo.IsDir ? "" : FileUtil
+						.convertStorage(fileInfo.fileSize)));
+
+		ImageView fileiconImageView = (ImageView) view
+				.findViewById(R.id.file_image);
+		ImageView fileiconframeImageView = (ImageView) view
+				.findViewById(R.id.file_image_frame);
+		if (fileInfo.IsDir) {
+			fileiconframeImageView.setVisibility(View.GONE);
+			fileiconImageView.setImageResource(R.drawable.ic_folder_filetype);
+		} else {
+			fileIcon.setIcon(fileInfo, fileiconImageView,
+					fileiconframeImageView);
+		}
+
+	}
 
 	public static void setupFileListItemInfo(Context context, View view,
 			FileInfo fileInfo, FileIconHelper fileIcon,
@@ -44,7 +73,7 @@ public class FileListItem {
 				.findViewById(R.id.file_checkbox);
 		ImageView favoriteImageView = (ImageView) view
 				.findViewById(R.id.favorite_img);
-		if (fileInteractionHub.getMode() == Mode.Pick) {
+		if (fileInteractionHub == null  || fileInteractionHub.getMode() == Mode.Pick) {
 			checkboxImageView.setVisibility(View.GONE);
 		} else {
 			checkboxImageView
