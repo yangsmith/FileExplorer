@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,7 @@ import com.yang.file_explorer.interfaces.IFileInteractionListener;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.FileUtil;
 import com.yang.file_explorer.utils.MenuUtils;
+import com.yang.file_explorer.utils.MenuUtils.MenuItemType;
 import com.yang.file_explorer.utils.ToastUtils;
 
 public class FileViewFragment extends SherlockFragment implements
@@ -160,6 +162,13 @@ public class FileViewFragment extends SherlockFragment implements
 	}
 
 	/*
+	 * 显示文件数量
+	 */
+	private void setFileNum(int filenum) {
+		mActivity.setFileNum(filenum,MenuItemType.MENU_DEVICE);
+	}
+
+	/*
 	 * 当文件夹无文件时显示空文件图标
 	 */
 	private void showEmptyView(boolean show) {
@@ -214,6 +223,12 @@ public class FileViewFragment extends SherlockFragment implements
 			if (!mActivity.getActionBar().isShowing()) {
 				mActivity.getActionBar().show();
 			}
+		}
+	}
+
+	public void refresh() {
+		if (mFileInteractionHub != null) {
+			mFileInteractionHub.refreshFileList();
 		}
 	}
 
@@ -375,6 +390,15 @@ public class FileViewFragment extends SherlockFragment implements
 
 	}
 
+	public boolean setPath(String location) {
+		if (!location.startsWith(mFileInteractionHub.getRootPath())) {
+			return false;
+		}
+		mFileInteractionHub.setCurrentPath(location);
+		mFileInteractionHub.refreshFileList();
+		return true;
+	}
+
 	/*
 	 * 复制文件
 	 */
@@ -382,9 +406,9 @@ public class FileViewFragment extends SherlockFragment implements
 		mFileInteractionHub.onOperationCopy(files);
 	}
 
-     /*
-      * 剪切文件
-      */
+	/*
+	 * 剪切文件
+	 */
 	public void moveToFile(ArrayList<FileInfo> files) {
 		mFileInteractionHub.onOperationMove(files);
 	}
@@ -454,7 +478,7 @@ public class FileViewFragment extends SherlockFragment implements
 		// TODO Auto-generated method stub
 		Collections.sort(mFileNameList, sort.getComparator());
 		onDataChanged();
-		mActivity.setFileNum(mFileNameList.size());
+		mActivity.setFileNum(mFileNameList.size(),MenuItemType.MENU_DEVICE);
 	}
 
 	@Override
@@ -469,10 +493,10 @@ public class FileViewFragment extends SherlockFragment implements
 		onDataChanged();
 	}
 
-	public class refreshFileAsyncTask extends AsyncTask<File, Void, Void> {
+	public class refreshFileAsyncTask extends AsyncTask<File, Void, Integer> {
 
 		@Override
-		protected Void doInBackground(File... files) {
+		protected Integer doInBackground(File... files) {
 			// TODO Auto-generated method stub
 
 			ArrayList<FileInfo> fileList = mFileNameList;
@@ -481,7 +505,7 @@ public class FileViewFragment extends SherlockFragment implements
 			File[] listFiles = files[0].listFiles(mFileCategoryHelper
 					.getFilter());
 			if (listFiles == null)
-				return null;
+				return Integer.valueOf(0);
 
 			for (File child : listFiles) {
 				String absolutePath = child.getAbsolutePath();
@@ -495,25 +519,29 @@ public class FileViewFragment extends SherlockFragment implements
 					}
 				}
 			}
-			return null;
+			return Integer.valueOf(fileList.size());
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
+			setFileNum(result.intValue());
 			showProgressBar(false);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.yang.file_explorer.interfaces.IFileInteractionListener#updateMediaData()
-	 * 媒体库更新后刷新
+	 * 
+	 * @see
+	 * com.yang.file_explorer.interfaces.IFileInteractionListener#updateMediaData
+	 * () 媒体库更新后刷新
 	 */
 	@Override
 	public void updateMediaData() {
 		// TODO Auto-generated method stub
-		ToastUtils.getInstance(mActivity).showMask("Fileview  updateMediaData", Toast.LENGTH_SHORT);
+		ToastUtils.getInstance(mActivity).showMask("Fileview  updateMediaData",
+				Toast.LENGTH_SHORT);
 	}
 
 }

@@ -25,6 +25,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.yang.file_explorer.R;
 import com.yang.file_explorer.adapter.SearchPopUpWindowAdapter;
 import com.yang.file_explorer.apis.FileInteractionHub.Mode;
+import com.yang.file_explorer.db.FavoriteDatabaseHelper;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.FileUtil;
@@ -35,7 +36,7 @@ import com.yang.file_explorer.view.FileViewFragment;
 public class FileListItem {
 
 	private String LOG_TAG = "FileListItem";
-	
+
 	public static void setupFileListItemInfo(Context context, View view,
 			FileInfo fileInfo, FileIconHelper fileIcon) {
 
@@ -73,17 +74,19 @@ public class FileListItem {
 				.findViewById(R.id.file_checkbox);
 		ImageView favoriteImageView = (ImageView) view
 				.findViewById(R.id.favorite_img);
-		if (fileInteractionHub == null  || fileInteractionHub.getMode() == Mode.Pick) {
+		if (fileInteractionHub == null
+				|| fileInteractionHub.getMode() == Mode.Pick) {
 			checkboxImageView.setVisibility(View.GONE);
 		} else {
 			checkboxImageView
 					.setImageResource(fileInfo.Selected ? R.drawable.btn_check_on
 							: R.drawable.btn_check_off);
 			favoriteImageView
-					.setImageResource(fileInfo.Started ? R.drawable.ic_star_filetype
+					.setImageResource(FavoriteDatabaseHelper.getInstance().isFavorite(fileInfo.filePath) ? R.drawable.ic_star_filetype
 							: R.drawable.ic_graystar_filetype);
 
 			checkboxImageView.setTag(fileInfo);
+			favoriteImageView.setTag(fileInfo);
 			view.setSelected(fileInfo.Selected);
 		}
 
@@ -160,7 +163,15 @@ public class FileListItem {
 				break;
 			case R.id.favorite_area: // 加星按钮点击事件
 			{
+				ImageView img = (ImageView) v.findViewById(R.id.favorite_img);
+				assert (img != null && img.getTag() != null);
 
+				FileInfo fileInfo = (FileInfo) img.getTag();
+				fileInfo.Started = !fileInfo.Started;
+				img.setImageResource(fileInfo.Started ? R.drawable.ic_star_filetype
+						: R.drawable.ic_graystar_filetype);
+
+				mfileInteractionHub.onOperationFavorite(fileInfo.filePath);
 			}
 				break;
 
@@ -169,9 +180,6 @@ public class FileListItem {
 			}
 		}
 	}
-	
-	
-
 
 	public static class ModeCallback implements ActionMode.Callback,
 			OnClickListener {
@@ -187,14 +195,16 @@ public class FileListItem {
 			mContext = context;
 			mfInteractionHub = fileInteractionHub;
 		}
-		
+
 		/*
 		 * 跳转至"我的设备"页面
 		 */
-		private void scrollToMydevice(){
-			MenuItemType menuItemType = ((MainActivity)mContext).getCurrentMenuItemType();
+		private void scrollToMydevice() {
+			MenuItemType menuItemType = ((MainActivity) mContext)
+					.getCurrentMenuItemType();
 			if (menuItemType != MenuItemType.MENU_DEVICE) {
-				((MainActivity)mContext).setShowSelFragments(MenuItemType.MENU_DEVICE);
+				((MainActivity) mContext)
+						.setShowSelFragments(MenuItemType.MENU_DEVICE);
 			}
 		}
 
@@ -355,9 +365,5 @@ public class FileListItem {
 		}
 
 	}
-	
-	
-	
-	
 
 }

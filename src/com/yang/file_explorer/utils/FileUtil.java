@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -14,6 +15,7 @@ import com.actionbarsherlock.view.ActionMode;
 import com.yang.file_explorer.R;
 import com.yang.file_explorer.apis.FileCategoryHelper;
 import com.yang.file_explorer.apis.FileCategoryHelper.FileCategoryType;
+import com.yang.file_explorer.entity.FavoriteItem;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.entity.Settings;
 
@@ -67,6 +69,17 @@ public class FileUtil {
 		return Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED);
 	}
+	
+	/*
+	 * 获取默认收藏文件
+	 */
+	
+	 public static ArrayList<FavoriteItem> getDefaultFavorites(Context context) {
+	        ArrayList<FavoriteItem> list = new ArrayList<FavoriteItem>();
+	        list.add(new FavoriteItem(context.getString(R.string.favorite_photo), makePath(getSdDirectory(), "DCIM/Camera")));
+	        list.add(new FavoriteItem(context.getString(R.string.favorite_sdcard), getSdDirectory()));
+	        return list;
+	    }
 
 	public static boolean setText(View view, int id, String text) {
 		TextView textView = (TextView) view.findViewById(id);

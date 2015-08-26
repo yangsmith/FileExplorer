@@ -39,6 +39,7 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 	private SlidingMenu sm;
 
 	private MenuItemType mCurrentmenuItemType;
+	
 	private TextView title;
 
 	private TextView filenum;
@@ -58,6 +59,8 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 	private  Activity mActivity = null;
 
 	ActionMode mActionMode;
+	
+	
 
 
 	@Override
@@ -70,8 +73,6 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 		initActionBar();
 		initSlidingMenu();
 
-		mSlidingMenuFragment = ((SlidingMenuFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.menu_fragment));
 		mActivity = this;
 		setShowSelFragments(MenuItemType.MENU_DEVICE);
 	}
@@ -115,7 +116,7 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 		
 		if (menutype == MenuItemType.MENU_DEVICE) {
 			setTitle(R.string.my_device);
-			setFileNum(mFileViewFragment.getAllFiles().size());
+			setFileNum(mFileViewFragment.getAllFiles().size(),mCurrentmenuItemType);
 			
 			mfragmentTransaction = getSupportFragmentManager()
 					.beginTransaction();
@@ -155,36 +156,37 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 		switch (menutype) {
 		case MENU_FAVORITE:
 			setTitle(R.string.star);
+			mFileCategoryFragment.onCategorySelected(FileCategoryType.Favorite);
 			
 			break;
 		case MENU_IMAGE:
 			setTitle(R.string.image);
-			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Picture));
+			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Picture),mCurrentmenuItemType);
 			mFileCategoryFragment.onCategorySelected(FileCategoryType.Picture);
 			break;
 		case MENU_VIDEO:
 			setTitle(R.string.video);
-			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Video));
+			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Video),mCurrentmenuItemType);
 			mFileCategoryFragment.onCategorySelected(FileCategoryType.Video);
 			break;
 		case MENU_DOCUMENT:
 			setTitle(R.string.document);
-			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Doc));
+			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Doc),mCurrentmenuItemType);
 			mFileCategoryFragment.onCategorySelected(FileCategoryType.Doc);
 			break;
 		case MENU_ZIP:
 			setTitle(R.string.zip);
-			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Zip));
+			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Zip),mCurrentmenuItemType);
 			mFileCategoryFragment.onCategorySelected(FileCategoryType.Zip);
 			break;
 		case MENU_APK:
 			setTitle(R.string.apk);
-			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Apk));
+			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Apk),mCurrentmenuItemType);
 			mFileCategoryFragment.onCategorySelected(FileCategoryType.Apk);
 			break;
 		case MENU_MUSIC:
 			setTitle(R.string.music);
-			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Music));
+			setFileNum((int)mSlidingMenuFragment.getFilenum(FileCategoryType.Music),mCurrentmenuItemType);
 			mFileCategoryFragment.onCategorySelected(FileCategoryType.Music);
 			break;
 		default:
@@ -196,6 +198,11 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 	public MenuItemType getCurrentMenuItemType(){
 		return mCurrentmenuItemType;
 	}
+	
+	public void setSlidingMenuFragment(SlidingMenuFragment slidingMenuFragment){
+		 mSlidingMenuFragment = slidingMenuFragment;
+	}
+
 	
 	public Fragment getSlidingMenuFragment(){
 		return mSlidingMenuFragment;
@@ -231,8 +238,8 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 	}
 
 	// 设置文件数量
-	public final void setFileNum(int num) {
-		if (filenum != null) {
+	public final void setFileNum(int num,MenuItemType menuItemType) {
+		if (filenum != null && menuItemType == mCurrentmenuItemType) {
 			filenum.setText(Integer.valueOf(num).toString());
 		}
 

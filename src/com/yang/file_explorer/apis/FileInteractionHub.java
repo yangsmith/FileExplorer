@@ -37,6 +37,7 @@ import com.yang.file_explorer.adapter.CreateFileListAdater;
 import com.yang.file_explorer.apis.FileListItem.ModeCallback;
 import com.yang.file_explorer.apis.FileSortHelper.SortMethod;
 import com.yang.file_explorer.R;
+import com.yang.file_explorer.db.FavoriteDatabaseHelper;
 import com.yang.file_explorer.entity.FileIcon;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.entity.GlobalConsts;
@@ -57,8 +58,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 
 	private ArrayList<FileInfo> mCheckedFileNameList = new ArrayList<FileInfo>();
 
-	private ArrayList<FileInfo> mStartFileNameList = new ArrayList<FileInfo>();
-
+	
 	private FileOperationHelper mFileOperationHelper;
 
 	private FileSortHelper mFileSortHelper;
@@ -206,14 +206,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 			}
 		}
 			break;
-		case R.id.favorite_area: {
-			if (f.Started) {
-				mStartFileNameList.add(f);
-			} else {
-				mStartFileNameList.remove(f);
-			}
-		}
-			break;
+		
 		default:
 			break;
 		}
@@ -342,14 +335,12 @@ public class FileInteractionHub implements IOperationProgressListener {
 		final File f = new File(path);
 		final Intent intent;
 		if (f.isDirectory()) {
-			intent = new Intent( "android.intent.action.MEDIA_SCANNER_SCAN_DIR");
-			intent.setData(Uri.fromFile(new File(path)));
-			Log.v(LOG_TAG,
-					"directory changed, send broadcast:" + intent.toString());
+			intent = new Intent(GlobalConsts.FILEUPDATEBROADCAST);
+			
 		} else {
 			intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 			intent.setData(Uri.fromFile(new File(path)));
-			Log.v(LOG_TAG, "file changed, send broadcast:" + intent.toString());
+			
 		}
 		mContext.sendBroadcast(intent);
 	}
@@ -602,6 +593,25 @@ public class FileInteractionHub implements IOperationProgressListener {
 
 		return true;
 	}
+	
+	/*
+	 * 收藏
+	 */
+	public void onOperationFavorite(String path) {
+		FavoriteDatabaseHelper databaseHelper = FavoriteDatabaseHelper
+				.getInstance();
+		if (databaseHelper != null) {
+			
+			if (databaseHelper.isFavorite(path)) {
+				databaseHelper.delete(path);
+			} else {
+				databaseHelper.insert(FileUtil.getNameFromFilepath(path), path);
+			}
+
+			
+		}
+	}
+
 
 	/*
 	 * 文件详情

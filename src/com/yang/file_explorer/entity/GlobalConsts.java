@@ -49,4 +49,7 @@ public abstract class GlobalConsts {
 	public static final int OPERATION_UP_LEVEL = 3;
 	
 	public static final int TAKE_PHOTO = 1001;
+	
+	
+	public static final String FILEUPDATEBROADCAST = "action.intent.action_file_update_broadast";
 }

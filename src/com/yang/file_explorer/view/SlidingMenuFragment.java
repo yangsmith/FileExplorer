@@ -59,7 +59,7 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
 	
 	private FileCategoryHelper mFileCategoryHelper;
 	
-	private Context mContext;
+	private MainActivity mActivity;
 	
 	private HashMap<FileCategoryType,Long> fileNums = new HashMap<FileCategoryType, Long>();
 	
@@ -72,7 +72,8 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
     		Bundle savedInstanceState) {
     	// TODO Auto-generated method stub
     	
-    	mContext = getActivity();
+    	mActivity = (MainActivity)getActivity();
+    	mActivity.setSlidingMenuFragment(this);
     	
     	View menu = inflater.inflate(R.layout.main_slidingmenu,container, false);
     	device   = (RelativeLayout)menu.findViewById(R.id.device);
@@ -91,7 +92,7 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
     	apk      = (RelativeLayout)menu.findViewById(R.id.apk);
     	apknum = (TextView)menu.findViewById(R.id.apk_num);
     	
-    	mFileCategoryHelper = new FileCategoryHelper(mContext);
+    	mFileCategoryHelper = new FileCategoryHelper(mActivity);
     	mFileCategoryHelper.refreshCategoryInfo();
     	
     	
@@ -253,6 +254,11 @@ public class SlidingMenuFragment extends Fragment implements OnClickListener{
 		default:
 			break;
 		}
+	}
+	
+	public void updatefilenum(){
+		mFileCategoryHelper.refreshCategoryInfo();
+		showFileNum();
 	}
 	
 	

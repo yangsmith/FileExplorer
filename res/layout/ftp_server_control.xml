@@ -4,8 +4,28 @@
     android:layout_height="fill_parent"
     android:background="#ffededed"
     android:orientation="vertical" >
-    
-    
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48.0dip"
+        android:layout_marginLeft="16.0dip"
+        android:layout_marginRight="16.0dip"
+        android:gravity="center_vertical"
+        android:paddingLeft="4.0dip"
+        android:paddingRight="4.0dip" >
+
+        <Switch
+            android:id="@+id/start_stop_switch"
+            style="@style/Switch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|left"
+            android:singleLine="true"
+            android:text="@string/start_wifi_label" 
+            android:textOn="开启"
+            android:textOff="关闭"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="54.0dip"
@@ -13,9 +33,9 @@
         android:layout_marginRight="8.0dip"
         android:background="#ffffffff"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="8.0dip"
-        android:paddingRight="8.0dip" 
-        android:orientation="horizontal">
+        android:paddingRight="8.0dip" >
 
         <TextView
             android:id="@+id/instruction_pre"
@@ -26,6 +46,7 @@
             android:textSize="16.0sp" />
 
         <LinearLayout
+            android:id="@+id/ftp_address_linearlayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -46,6 +67,39 @@
                 android:textColor="#ffcc0000"
                 android:textSize="18.0sp" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            android:text="@string/wifi_state" />
+
+        <TextView
+            android:id="@+id/wifi_state"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="5px"
+            android:singleLine="true"
+            android:text="@string/wifi_state" />
+
+        <ImageView
+            android:id="@+id/wifi_state_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/wifi_state4" />
     </LinearLayout>
 
 </LinearLayout>

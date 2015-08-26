@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,9 +35,11 @@ import com.yang.file_explorer.apis.FileInteractionHub;
 import com.yang.file_explorer.apis.FileInteractionHub.Mode;
 import com.yang.file_explorer.apis.FileSortHelper;
 import com.yang.file_explorer.entity.FileInfo;
+import com.yang.file_explorer.entity.GlobalConsts;
 import com.yang.file_explorer.interfaces.FavoriteDatabaseListener;
 import com.yang.file_explorer.interfaces.IFileInteractionListener;
 import com.yang.file_explorer.ui.MainActivity;
+import com.yang.file_explorer.utils.FileUtil;
 import com.yang.file_explorer.utils.MenuUtils;
 import com.yang.file_explorer.utils.ToastUtils;
 
@@ -46,7 +47,7 @@ public class FileCategoryFragment extends SherlockFragment implements
 		IFileInteractionListener, FavoriteDatabaseListener {
 
 	private String LOG_TAG = "FileCategoryFragment";
-	
+
 	private MainActivity mActivity;
 
 	private View mRootView;
@@ -56,6 +57,8 @@ public class FileCategoryFragment extends SherlockFragment implements
 	private FileIconHelper mFileIconHelper;
 
 	private FileViewFragment mFileViewFragment;
+	
+	private SlidingMenuFragment mSlidingMenuFragment;
 
 	private ListView mFilePathListView;
 
@@ -68,15 +71,15 @@ public class FileCategoryFragment extends SherlockFragment implements
 	private LinearLayout mSDNotAvailable;
 
 	private FileCategoryHelper mFileCagetoryHelper;
-	
+
 	private ScannerReceiver mScannerReceiver;
-	
+
 	private MenuUtils mMenuUtils;
 
 	private ViewPage curViewPage = ViewPage.Invalid;
 
 	public enum ViewPage {
-		Favorite, Category, Invalid
+		Favorite, Category, Invalid, NoSD
 	}
 
 	@Override
@@ -85,7 +88,7 @@ public class FileCategoryFragment extends SherlockFragment implements
 		// TODO Auto-generated method stub
 		mActivity = (MainActivity) getActivity();
 		mActivity.setFileCategoryFragment(this);
-		
+
 		setHasOptionsMenu(true);
 		mRootView = inflater.inflate(R.layout.file_explorer_category,
 				container, false);
@@ -94,11 +97,14 @@ public class FileCategoryFragment extends SherlockFragment implements
 				.findViewById(R.id.file_path_list);
 
 		mEmptyView = (LinearLayout) mRootView.findViewById(R.id.empty_view);
+		
+		mFileViewFragment    = (FileViewFragment)mActivity.getFileViewFragment();
+		mSlidingMenuFragment = (SlidingMenuFragment)mActivity.getSlidingMenuFragment();
 
 		mFileInteractionHub = new FileInteractionHub(this);
 		mFileInteractionHub.setMode(Mode.View);
 		mFileInteractionHub.setRootPath("/");
-		
+
 		mMenuUtils = new MenuUtils(mActivity, mFileInteractionHub);
 
 		mFileCagetoryHelper = new FileCategoryHelper(mActivity);
@@ -108,7 +114,7 @@ public class FileCategoryFragment extends SherlockFragment implements
 				(ListView) mRootView.findViewById(R.id.favorite_list), this,
 				mFileInteractionHub, mFileIconHelper);
 		mFavoriteList.initList();
-
+		
 		mAdapter = new FileListCursorAdapter(mActivity, null,
 				mFileInteractionHub, mFileIconHelper);
 		mFilePathListView.setAdapter(mAdapter);
@@ -116,17 +122,15 @@ public class FileCategoryFragment extends SherlockFragment implements
 
 		return mRootView;
 	}
-	
-	
-	   private void registerScannerReceiver() {
-	        mScannerReceiver = new ScannerReceiver();
-	        IntentFilter intentFilter = new IntentFilter();
-	        intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
-	        intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
-	        intentFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
-	        intentFilter.addDataScheme("file");
-	        mActivity.registerReceiver(mScannerReceiver, intentFilter);
-	    }
+
+	private void registerScannerReceiver() {
+		mScannerReceiver = new ScannerReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
+		intentFilter.addAction(GlobalConsts.FILEUPDATEBROADCAST);
+
+		mActivity.registerReceiver(mScannerReceiver, intentFilter);
+	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -144,10 +148,10 @@ public class FileCategoryFragment extends SherlockFragment implements
 	/*
 	 * 选中某分类文件
 	 */
-	public  void onCategorySelected(FileCategoryType f) {
+	public void onCategorySelected(FileCategoryType f) {
 		if (mFileCagetoryHelper.getCurCategoryType() != f) {
 			mFileCagetoryHelper.setCurCategoryType(f);
-			;
+
 			mFileInteractionHub.setCurrentPath(mFileInteractionHub
 					.getRootPath()
 					+ getString(mFileCagetoryHelper.getCurCategoryNameResId()));
@@ -168,17 +172,23 @@ public class FileCategoryFragment extends SherlockFragment implements
 		curViewPage = p;
 
 		showView(R.id.file_path_list, false);
+		showView(R.id.sd_not_available_page, false);
 		mFavoriteList.show(false);
 		showEmptyView(false);
 
 		switch (p) {
 		case Favorite:
+			mFavoriteList.update();
 			mFavoriteList.show(true);
 			showEmptyView(mFavoriteList.getCount() == 0);
+			setFileNum((int)mFavoriteList.getCount());
 			break;
 		case Category:
 			showView(R.id.file_path_list, true);
 			showEmptyView(mAdapter.getCount() == 0);
+			break;
+		case NoSD:
+			showView(R.id.sd_not_available_page, true);
 			break;
 
 		}
@@ -199,6 +209,13 @@ public class FileCategoryFragment extends SherlockFragment implements
 			mEmptyView.setVisibility(show ? View.VISIBLE : View.GONE);
 	}
 
+	/*
+	 * 显示文件数量
+	 */
+	private void setFileNum(int filenum) {
+		mActivity.setFileNum(filenum,mActivity.getCurrentMenuItemType());
+	}
+
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
@@ -213,18 +230,21 @@ public class FileCategoryFragment extends SherlockFragment implements
 	@Override
 	public boolean onRefreshFileList(String path, FileSortHelper sort) {
 		// TODO Auto-generated method stub
-		FileCategoryType curCategoryType = mFileCagetoryHelper.getCurCategoryType();
+		FileCategoryType curCategoryType = mFileCagetoryHelper
+				.getCurCategoryType();
 		if (curCategoryType == FileCategoryType.Favorite
 				|| curCategoryType == FileCategoryType.All)
 			return false;
 
-		Cursor c = mFileCagetoryHelper.query(curCategoryType, sort.getSortMethod());
+		Cursor c = mFileCagetoryHelper.query(curCategoryType,
+				sort.getSortMethod());
 		showEmptyView(c == null || c.getCount() == 0);
+		setFileNum(c.getCount());
 		mAdapter.changeCursor(c);
 
 		return true;
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
@@ -233,60 +253,70 @@ public class FileCategoryFragment extends SherlockFragment implements
 			mActivity.unregisterReceiver(mScannerReceiver);
 		}
 	}
-	
+
 	private class ScannerReceiver extends BroadcastReceiver {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            Log.v(LOG_TAG, "received broadcast: " + action.toString());
-            // handle intents related to external storage
-            if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED) || action.equals(Intent.ACTION_MEDIA_MOUNTED)
-                    || action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
-                notifyFileChanged();
-            }
-        }
-    }
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			Log.v(LOG_TAG, "received broadcast: " + action.toString());
+			// handle intents related to external storage
+			if (action.equals(GlobalConsts.FILEUPDATEBROADCAST) || action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)) {
+				notifyFileChanged();
+			}
+		}
+	}
 
-    private void updateUI() {
-      
-       mFileInteractionHub.refreshFileList();       
-    }
+	private void updateUI() {
 
-    // process file changed notification, using a timer to avoid frequent
-    // refreshing due to batch changing on file system
-    synchronized public void notifyFileChanged() {
-        if (timer != null) {
-            timer.cancel();
-        }
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
+		boolean sdCardReady = FileUtil.isSDCardReady();
+		if (sdCardReady) {
+			if (mSlidingMenuFragment == null) {
+				mSlidingMenuFragment = (SlidingMenuFragment)mActivity.getSlidingMenuFragment();
+			}
+			mSlidingMenuFragment.updatefilenum();
+			mFileInteractionHub.refreshFileList();
+			mFileViewFragment.refresh();
+		} else {
+			showPage(ViewPage.NoSD);
+		}
 
-            public void run() {
-                timer = null;
-                Message message = new Message();
-                message.what = MSG_FILE_CHANGED_TIMER;
-                handler.sendMessage(message);
-            }
+	}
 
-        }, 1000);
-    }
+	// process file changed notification, using a timer to avoid frequent
+	// refreshing due to batch changing on file system
+	synchronized public void notifyFileChanged() {
+		if (timer != null) {
+			timer.cancel();
+		}
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
 
-    private static final int MSG_FILE_CHANGED_TIMER = 100;
+			public void run() {
+				timer = null;
+				Message message = new Message();
+				message.what = MSG_FILE_CHANGED_TIMER;
+				handler.sendMessage(message);
+			}
 
-    private Timer timer;
+		}, 1000);
+	}
 
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_FILE_CHANGED_TIMER:
-                    updateUI();
-                    break;
-            }
-            super.handleMessage(msg);
-        }
+	private static final int MSG_FILE_CHANGED_TIMER = 100;
 
-    };
+	private Timer timer;
+
+	private Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MSG_FILE_CHANGED_TIMER:
+				updateUI();
+				break;
+			}
+			super.handleMessage(msg);
+		}
+
+	};
 
 	@Override
 	public Context getContext() {
@@ -360,17 +390,20 @@ public class FileCategoryFragment extends SherlockFragment implements
 	@Override
 	public void onFavoriteDatabaseChanged() {
 		// TODO Auto-generated method stub
-
+		setFileNum((int) mFavoriteList.getCount());
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.yang.file_explorer.interfaces.IFileInteractionListener#updateMediaData()
-	 * 更新媒体库后的刷新
+	 * 
+	 * @see
+	 * com.yang.file_explorer.interfaces.IFileInteractionListener#updateMediaData
+	 * () 更新媒体库后的刷新
 	 */
 	@Override
 	public void updateMediaData() {
 		// TODO Auto-generated method stub
-		ToastUtils.getInstance(mActivity).showMask("FileCategory  updateMediaData", Toast.LENGTH_SHORT);
+		ToastUtils.getInstance(mActivity).showMask(
+				"FileCategory  updateMediaData", Toast.LENGTH_SHORT);
 	}
 }

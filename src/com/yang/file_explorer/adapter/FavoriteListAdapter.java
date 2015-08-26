@@ -3,6 +3,7 @@ package com.yang.file_explorer.adapter;
 import java.util.List;
 
 import com.yang.file_explorer.R;
+import com.yang.file_explorer.apis.FavoriteList;
 import com.yang.file_explorer.apis.FileIconHelper;
 import com.yang.file_explorer.apis.FileInteractionHub;
 import com.yang.file_explorer.apis.FileListItem;
@@ -29,15 +30,18 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem> {
 	private OnClickListener mOnClickListener;
 	
 	private FileInteractionHub mFileInteractionHub;
+	
+	private FavoriteList mFavoriteList;
 
 	public FavoriteListAdapter(Context context, int resource,
-			List<FavoriteItem> objects,FileInteractionHub fHub, FileIconHelper fileIcon) {
+			List<FavoriteItem> objects,FileInteractionHub fHub, FileIconHelper fileIcon,FavoriteList favoriteList) {
 		// TODO Auto-generated constructor stub
 		super(context, resource, objects);
 		mContext = context;
 		mInflater = LayoutInflater.from(context);
 		mfileIconHelper = fileIcon;
 		mFileInteractionHub = fHub;
+		mFavoriteList = favoriteList;
 	}
 
 	@Override
@@ -72,11 +76,15 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem> {
 					FileUtil.convertStorage(lFileInfo.fileSize));
 		}
 		
+		ImageView favoriteImageView = (ImageView) view
+				.findViewById(R.id.favorite_img);
+		favoriteImageView.setTag(Integer.valueOf(position));
+		
 
 		ImageView lFileImage = (ImageView) view.findViewById(R.id.file_image);
 		ImageView lFileImageFrame = (ImageView) view
 				.findViewById(R.id.file_image_frame);
-		lFileImage.setTag(position);
+		
 
 		if (lFileInfo.IsDir) {
 			lFileImageFrame.setVisibility(View.GONE);
@@ -85,7 +93,7 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem> {
 			mfileIconHelper.setIcon(lFileInfo, lFileImage, lFileImageFrame);
 		}
 		
-		mOnClickListener = new FileListItem.FileItemOnClickListener(mContext,mFileInteractionHub);
+		mOnClickListener = new FavoriteList.FileItemOnClickListener(mContext,mFileInteractionHub,mFavoriteList);
         view.findViewById(R.id.favorite_area).setOnClickListener(mOnClickListener);
 
 		return view;
