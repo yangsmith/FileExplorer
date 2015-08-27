@@ -113,7 +113,7 @@ public class MenuUtils implements OnMenuItemClickListener {
 			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_REFRESH);
 			break;
 		case 5: // …Ë÷√
-
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_SETTING);
 			break;
 
 		case 6: // πÿ”⁄

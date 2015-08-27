@@ -189,7 +189,7 @@
                 android:background="#ffcbcbcb" />
 
             <TextView
-                android:id="@+id/feekback"
+                android:id="@+id/email"
                 android:layout_width="fill_parent"
                 android:layout_height="47.0dip"
                 android:background="@drawable/setting_item_selecter"
@@ -206,7 +206,7 @@
                 android:background="#ffcbcbcb" />
 
             <TextView
-                android:id="@+id/version"
+                android:id="@+id/about"
                 android:layout_width="fill_parent"
                 android:layout_height="47.0dip"
                 android:background="@drawable/setting_item_selecter"

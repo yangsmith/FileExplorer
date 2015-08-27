@@ -720,6 +720,10 @@ public class FileInteractionHub implements IOperationProgressListener {
 			refreshFileList();
 			break;
 			
+		case GlobalConsts.MENU_SETTING:
+			mContext.startActivity(new Intent("com.yang.file_explorer.ui.SettingActivity"));;
+			break;
+			
 		case GlobalConsts.MENU_ABOUT:
 			onAbout();
 			break;
