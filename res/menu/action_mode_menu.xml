@@ -21,10 +21,13 @@
         android:icon="@drawable/ic_share_actionbar"
         android:showAsAction="ifRoom"
         android:title="@string/share"/>
-    <item
+    <!-- 
+        <item
         android:id="@+id/favorite"
         android:showAsAction="ifRoom"
         android:title="@string/favorite"/>
+     -->
+   
     <item
         android:id="@+id/rename"
         android:showAsAction="ifRoom"
@@ -33,9 +36,13 @@
         android:id="@+id/detail"
         android:showAsAction="ifRoom"
         android:title="@string/detail"/>
-    <item
+    
+    <!-- 
+         <item
         android:id="@+id/compress"
         android:showAsAction="ifRoom"
         android:title="@string/compress"/>
+     -->
+   
 
 </menu>

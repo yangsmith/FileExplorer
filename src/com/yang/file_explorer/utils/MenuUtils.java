@@ -117,7 +117,7 @@ public class MenuUtils implements OnMenuItemClickListener {
 			break;
 
 		case 6: // 关于
-			ToastUtils.getInstance(mContext).showMask("关于", Toast.LENGTH_LONG);
+			mFileInteractionHub.onMenuOperation(GlobalConsts.MENU_ABOUT);
 			break;
 
 		case 7: // 退出

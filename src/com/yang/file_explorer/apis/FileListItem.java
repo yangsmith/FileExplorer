@@ -258,8 +258,8 @@ public class FileListItem {
 				mode.finish();
 				break;
 
-			case R.id.favorite: // 收藏操作
-				break;
+			//case R.id.favorite: // 收藏操作
+			//	break;
 
 			case R.id.rename: // 重命名操作
 				mfInteractionHub.onOperationRename();
@@ -271,8 +271,8 @@ public class FileListItem {
 				mode.finish();
 				break;
 
-			case R.id.compress: // 压缩操作
-				break;
+		//	case R.id.compress: // 压缩操作
+			//	break;
 
 			default:
 				break;

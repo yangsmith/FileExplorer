@@ -132,6 +132,7 @@ public class MainActivity extends BaseSlidingFragmentActivity {
 
 		if (menutype == MenuItemType.MENU_WIFI) {
 			setTitle(R.string.wifi);
+			filenum.setText("");;
 			mfragmentTransaction = getSupportFragmentManager()
 					.beginTransaction();
 			mfragmentTransaction.hide(getSupportFragmentManager()

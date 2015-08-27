@@ -42,7 +42,7 @@ public abstract class GlobalConsts {
 	public static final int MENU_SORT_TYPE = 14;
 	public static final int MENU_REFRESH = 15;
 	public static final int MENU_EXIT = 16;
-	public static final int MENU_ABOUT = 15;
+	public static final int MENU_ABOUT = 17;
 	public static final int MENU_SHOWHIDE = 117;
 	public static final int MENU_COPY_PATH = 118;
 

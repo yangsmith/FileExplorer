@@ -58,7 +58,6 @@ public class FileInteractionHub implements IOperationProgressListener {
 
 	private ArrayList<FileInfo> mCheckedFileNameList = new ArrayList<FileInfo>();
 
-	
 	private FileOperationHelper mFileOperationHelper;
 
 	private FileSortHelper mFileSortHelper;
@@ -95,7 +94,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 		mFileInteractionListener = fileInteractionListener;
 		mFileSortHelper = new FileSortHelper();
 		mContext = mFileInteractionListener.getContext();
-		mFileOperationHelper = new FileOperationHelper(this,mContext);
+		mFileOperationHelper = new FileOperationHelper(this, mContext);
 		setup();
 	}
 
@@ -206,7 +205,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 			}
 		}
 			break;
-		
+
 		default:
 			break;
 		}
@@ -280,10 +279,10 @@ public class FileInteractionHub implements IOperationProgressListener {
 	public Mode getMode() {
 		return mcurrentMode;
 	}
-	
+
 	public SortMethod getSortMethod() {
 		return mFileSortHelper.getSortMethod();
-	} 
+	}
 
 	public FileInfo getItem(int pos) {
 		return mFileInteractionListener.getItem(pos);
@@ -331,16 +330,16 @@ public class FileInteractionHub implements IOperationProgressListener {
 		// LogUtils.d(LOG_TAG, "notifyFileSystemChanged");
 		// }
 		// });
-		
+
 		final File f = new File(path);
 		final Intent intent;
 		if (f.isDirectory()) {
 			intent = new Intent(GlobalConsts.FILEUPDATEBROADCAST);
-			
+
 		} else {
 			intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 			intent.setData(Uri.fromFile(new File(path)));
-			
+
 		}
 		mContext.sendBroadcast(intent);
 	}
@@ -593,7 +592,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 
 		return true;
 	}
-	
+
 	/*
 	 * 收藏
 	 */
@@ -601,17 +600,15 @@ public class FileInteractionHub implements IOperationProgressListener {
 		FavoriteDatabaseHelper databaseHelper = FavoriteDatabaseHelper
 				.getInstance();
 		if (databaseHelper != null) {
-			
+
 			if (databaseHelper.isFavorite(path)) {
 				databaseHelper.delete(path);
 			} else {
 				databaseHelper.insert(FileUtil.getNameFromFilepath(path), path);
 			}
 
-			
 		}
 	}
-
 
 	/*
 	 * 文件详情
@@ -722,6 +719,10 @@ public class FileInteractionHub implements IOperationProgressListener {
 		case GlobalConsts.MENU_REFRESH:
 			refreshFileList();
 			break;
+			
+		case GlobalConsts.MENU_ABOUT:
+			onAbout();
+			break;
 
 		case GlobalConsts.MENU_EXIT:
 			((MainActivity) mContext).exit();
@@ -793,6 +794,26 @@ public class FileInteractionHub implements IOperationProgressListener {
 			}
 		});
 
+	}
+
+	/*
+	 * 关于
+	 */
+
+	public void onAbout() {
+		Dialog dialog = new AlertDialog.Builder(mContext)
+				.setIcon(R.drawable.ic_logo_actionbar)
+				.setTitle(R.string.about_dlg_title)
+				.setMessage(R.string.about_dlg_message).setPositiveButton(R.string.confirm, new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				}).create();
+		
+		dialog.show();
 	}
 
 	/*
