@@ -66,8 +66,8 @@
 
             <RelativeLayout
                 android:id="@+id/showhide_line"
-                android:layout_width="fill_parent"
                 android:layout_height="64.0dip"
+                android:layout_width="fill_parent"
                 android:background="@drawable/setting_item_selecter"
                 android:clickable="true" >
 
@@ -112,8 +112,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1.0dip"
                 android:background="#ffcbcbcb" />
-
-            <LinearLayout
+            <!--
+      <LinearLayout
                 android:id="@+id/view_mode_line"
                 android:layout_width="fill_parent"
                 android:layout_height="64.0dip"
@@ -137,7 +137,7 @@
                     android:text="@string/view_mode_info1"
                     android:textColor="#ff777777"
                     android:textSize="16.0sp" />
-            </LinearLayout>
+            </LinearLayout>-->
 
             <TextView
                 android:layout_width="fill_parent"

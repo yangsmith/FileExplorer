@@ -215,12 +215,15 @@
     <string name="feekback_subject">文件管理 问题反馈</string>
     <string name="share_subject">文件管理</string>
     <string name="no_way_to_share">没有应用可以执行该操作</string>
+    <string name="no_way_to_email">没有应用可以发送邮件</string>
     <string name="share_title">通过以下方式分享</string>
+    <string name="share_text">安卓手机必备文件管理工具 SE文件浏览</string>
     <string name="finish_download">文件下载完成</string>
     <string name="download_faile">下载失败</string>
     <string name="ticker_text">文件管理正在更新</string>
     <string name="notify_title">文件管理</string>
     <string name="notify_retry">下载失败，点击重试。</string>
+    <string name="my_email">1172069959@qq.com</string>
     <string name="notify_install">下载完成，点击安装程序。</string>
     <string name="newest_version">已经是最新版本</string>
     <string name="update_info">发现新版本，是否现在升级？</string>
@@ -235,7 +238,6 @@
     <string name="Ringtones">手机铃声</string>
     <string name="notif_text">远程管理服务正在运行   %1$s</string>
     <string name="about_dlg_title">关于 SE文件管理器</string>
-    <string name="about_dlg_message">
-        <b>简介：</b> 关于 SE文件管理器(SE) 允许在您的 Android设备上进行文件操作。\n\n\        <b>维护：</b> YangSmith (hzyangsmith@gmail.com)\n\n        <b>编译：</b> YangSmith (hzyangsmith@gmail.com)\n\n        <b>美工：</b> 小燕\n\n</string>
+    <string name="about_dlg_message"><b>简介：</b> 关于 SE文件管理器(SE) 允许在您的 Android设备上进行文件操作。\n\n\        <b>维护：</b> YangSmith (hzyangsmith@gmail.com)\n\n        <b>编译：</b> YangSmith (hzyangsmith@gmail.com)\n\n        <b>美工：</b> 小燕\n\n</string>
 
 </resources>

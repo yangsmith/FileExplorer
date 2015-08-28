@@ -44,6 +44,7 @@ import com.yang.file_explorer.entity.GlobalConsts;
 import com.yang.file_explorer.interfaces.IFileInteractionListener;
 import com.yang.file_explorer.interfaces.IOperationProgressListener;
 import com.yang.file_explorer.ui.MainActivity;
+import com.yang.file_explorer.ui.SettingActivity;
 import com.yang.file_explorer.utils.FileUtil;
 import com.yang.file_explorer.utils.LogUtils;
 import com.yang.file_explorer.widget.CustomDialog;
@@ -721,7 +722,7 @@ public class FileInteractionHub implements IOperationProgressListener {
 			break;
 			
 		case GlobalConsts.MENU_SETTING:
-			mContext.startActivity(new Intent("com.yang.file_explorer.ui.SettingActivity"));;
+			((MainActivity)mContext).startActivity(new Intent(mContext,SettingActivity.class));;
 			break;
 			
 		case GlobalConsts.MENU_ABOUT:

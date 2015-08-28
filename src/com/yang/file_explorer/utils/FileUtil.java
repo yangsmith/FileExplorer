@@ -15,9 +15,9 @@ import com.actionbarsherlock.view.ActionMode;
 import com.yang.file_explorer.R;
 import com.yang.file_explorer.apis.FileCategoryHelper;
 import com.yang.file_explorer.apis.FileCategoryHelper.FileCategoryType;
+import com.yang.file_explorer.apis.SettingHelper;
 import com.yang.file_explorer.entity.FavoriteItem;
 import com.yang.file_explorer.entity.FileInfo;
-import com.yang.file_explorer.entity.Settings;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -107,7 +107,7 @@ public class FileUtil {
 	}
 
 	public static boolean shouldShowFile(File file) {
-		boolean show = Settings.instance().getShowDotAndHiddenFiles();
+		boolean show = SettingHelper.getShowHideFile();
 		if (show)
 			return true;
 

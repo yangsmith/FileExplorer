@@ -41,11 +41,11 @@ import com.yang.file_explorer.adapter.FileListAdater;
 import com.yang.file_explorer.apis.FileCategoryHelper;
 import com.yang.file_explorer.apis.FileIconHelper;
 import com.yang.file_explorer.apis.FileInteractionHub;
+import com.yang.file_explorer.apis.SettingHelper;
 import com.yang.file_explorer.apis.FileInteractionHub.Mode;
 import com.yang.file_explorer.apis.FileSortHelper;
 import com.yang.file_explorer.entity.FileInfo;
 import com.yang.file_explorer.entity.GlobalConsts;
-import com.yang.file_explorer.entity.Settings;
 import com.yang.file_explorer.interfaces.IFileInteractionListener;
 import com.yang.file_explorer.ui.MainActivity;
 import com.yang.file_explorer.utils.FileUtil;
@@ -61,6 +61,8 @@ public class FileViewFragment extends SherlockFragment implements
 	private FileIconHelper mFileIconHelper;
 
 	private FileCategoryHelper mFileCategoryHelper;
+	
+	private SettingHelper  mSettingHelper;
 
 	private MainActivity mActivity;
 
@@ -127,6 +129,7 @@ public class FileViewFragment extends SherlockFragment implements
 		mrefreshViewLinearLayout = (LinearLayout) mRootView
 				.findViewById(R.id.refresh_view);
 
+		mSettingHelper = SettingHelper.getInstance(mActivity);
 		mFileInteractionHub = new FileInteractionHub(this);
 		mFileCategoryHelper = new FileCategoryHelper(mActivity);
 		mMenuUtils = new MenuUtils(mActivity, mFileInteractionHub);
@@ -141,7 +144,10 @@ public class FileViewFragment extends SherlockFragment implements
 		mfileListView.setAdapter(mAdapter);
 
 		mFileInteractionHub.setMode(Mode.View);
+		
+		
 		mFileInteractionHub.setRootPath(sdDir);
+		mFileInteractionHub.setCurrentPath(mSettingHelper.getRootPath());
 
 		updateUI();
 
@@ -512,8 +518,7 @@ public class FileViewFragment extends SherlockFragment implements
 				if (FileUtil.isNormalFile(absolutePath)
 						&& FileUtil.shouldShowFile(absolutePath)) {
 					FileInfo lFileInfo = FileUtil.GetFileInfo(child,
-							mFileCategoryHelper.getFilter(), Settings
-									.instance().getShowDotAndHiddenFiles());
+							mFileCategoryHelper.getFilter(), mSettingHelper.getShowHideFile());
 					if (lFileInfo != null) {
 						fileList.add(lFileInfo);
 					}
