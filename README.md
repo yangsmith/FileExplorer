@@ -2,7 +2,7 @@
 # Android 文件管理器
 
 #发布版本
-##[腾讯应用宝](http://android.myapp.com/myapp/detail.htm?apkName=com.yang.file_explorer)      
+####[腾讯助手](http://android.myapp.com/myapp/detail.htm?apkName=com.yang.file_explorer)      
 
 #包常用ui控件有:        
 1.侧滑菜单slidingMenu           
